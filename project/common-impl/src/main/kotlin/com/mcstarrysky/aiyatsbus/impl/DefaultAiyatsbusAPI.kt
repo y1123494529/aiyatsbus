@@ -48,10 +48,13 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
 
     private val enchantmentRegisterer0: AiyatsbusEnchantmentRegisterer by lazy {
         when {
-            MinecraftVersion.versionId >= 12102 -> proxy("com.mcstarrysky.aiyatsbus.impl.registration.v12103_nms.DefaultModernEnchantmentRegisterer")
-            MinecraftVersion.versionId >= 12100 -> proxy("com.mcstarrysky.aiyatsbus.impl.registration.v12100_nms.DefaultModernEnchantmentRegisterer")
+            MinecraftVersion.versionId >= 12102 ->
+                proxy<ModernEnchantmentRegisterer>("com.mcstarrysky.aiyatsbus.impl.registration.v12103_nms.DefaultModernEnchantmentRegisterer")
+            MinecraftVersion.versionId >= 12100 ->
+                proxy<ModernEnchantmentRegisterer>("com.mcstarrysky.aiyatsbus.impl.registration.v12100_nms.DefaultModernEnchantmentRegisterer")
             MinecraftVersion.versionId >= 12005 -> throw UnsupportedVersionException()
-            MinecraftVersion.versionId >= 12003 -> proxy("com.mcstarrysky.aiyatsbus.impl.registration.v12004_nms.DefaultModernEnchantmentRegisterer")
+            MinecraftVersion.versionId >= 12003 ->
+                proxy<ModernEnchantmentRegisterer>("com.mcstarrysky.aiyatsbus.impl.registration.v12004_nms.DefaultModernEnchantmentRegisterer")
             else -> DefaultLegacyEnchantmentRegisterer
         }
     }
