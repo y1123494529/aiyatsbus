@@ -16,13 +16,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcstarrysky.aiyatsbus.impl.registration.v12100_nms
+package com.mcstarrysky.aiyatsbus.impl.registration.v12103_nms
 
 import com.mcstarrysky.aiyatsbus.core.AiyatsbusEnchantment
 import com.mcstarrysky.aiyatsbus.core.AiyatsbusEnchantmentBase
 import com.mcstarrysky.aiyatsbus.core.AiyatsbusEnchantmentManager
 import com.mcstarrysky.aiyatsbus.core.registration.modern.ModernEnchantmentRegisterer
-import com.mcstarrysky.aiyatsbus.impl.registration.v12100_paper.EnchantmentHelper
+import com.mcstarrysky.aiyatsbus.impl.registration.v12103_paper.EnchantmentHelper
 import net.minecraft.core.*
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.MinecraftKey

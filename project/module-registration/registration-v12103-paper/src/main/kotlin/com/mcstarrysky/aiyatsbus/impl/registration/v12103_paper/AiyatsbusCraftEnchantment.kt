@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.mcstarrysky.aiyatsbus.impl.registration.v12100_paper
+package com.mcstarrysky.aiyatsbus.impl.registration.v12103_paper
 
 import com.mcstarrysky.aiyatsbus.core.AiyatsbusEnchantment
 import com.mcstarrysky.aiyatsbus.core.AiyatsbusEnchantmentBase
