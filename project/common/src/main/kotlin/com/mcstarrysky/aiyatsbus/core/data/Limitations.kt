@@ -57,17 +57,17 @@ data class Limitations(
                 if (value == "*") {
                     conflictsWithEverything = true
                 } else {
-                    conflicts[belonging.basicData.name] = value
+                    conflicts += belonging.basicData.name to value
                 }
                 return@mapNotNull null
             }
             CONFLICT_GROUP -> {
-                conflictGroups.computeIfAbsent(belonging.basicData.name) { mutableListOf() } += value
+                conflictGroups += belonging.basicData.name to value
                 type to value
             }
             else -> type to value
         }
-    }.toMutableList()
+    }.toMutableSet()
 
     init {
         limitations += MAX_CAPABILITY to ""
@@ -157,14 +157,20 @@ data class Limitations(
     companion object {
 
         /** 记录单向附魔冲突, 开服后自动挂双向 */
-        private val conflicts = mutableMapOf<String, String>()
+        private val conflicts = mutableListOf<Pair<String, String>>()
 
         /** 记录单向附魔组冲突, 开服后为附魔组的每一个此附魔添加此冲突附魔 */
-        private val conflictGroups = mutableMapOf<String, MutableList<String>>()
+        private val conflictGroups = mutableListOf<Pair<String, String>>()
 
         @Reloadable
         @AwakePriority(LifeCycle.ENABLE, StandardPriorities.LIMITATIONS)
         fun onEnable() {
+            conflictGroups.forEach { (enchant, group) ->
+                aiyatsbusEt(enchant) ?: return@forEach
+                aiyatsbusGroup(group)?.enchantments?.forEach { it.limitations.limitations.add(CONFLICT_ENCHANT to enchant) }
+            }
+            conflictGroups.clear()
+
             conflicts.forEach { (a, b) ->
                 val etA = aiyatsbusEt(a) ?: return@forEach
                 val etB = aiyatsbusEt(b) ?: return@forEach
@@ -174,14 +180,6 @@ data class Limitations(
                 etB.limitations.limitations.add(conflictB)
             }
             conflicts.clear()
-
-            conflictGroups.forEach { (enchant, groups) ->
-                aiyatsbusEt(enchant) ?: return@forEach
-                groups.forEach group@{ group ->
-                    (aiyatsbusGroup(group) ?: return@group).enchantments.forEach { it.limitations.limitations.add(CONFLICT_ENCHANT to enchant) }
-                }
-            }
-            conflictGroups.clear()
         }
     }
 }
