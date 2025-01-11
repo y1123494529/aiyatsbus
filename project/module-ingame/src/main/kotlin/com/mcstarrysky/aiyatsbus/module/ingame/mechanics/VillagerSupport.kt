@@ -68,7 +68,7 @@ object VillagerSupport {
         result.clearEts()
         repeat(amount) {
             val drawEt = (aiyatsbusGroups[tradeGroup]?.enchantments ?: listOf()).filter {
-                it.limitations.checkAvailable(CheckType.MERCHANT, result).isSuccess && it.alternativeData.isTradeable
+                it.limitations.checkAvailable(CheckType.MERCHANT, result).isSuccess && it.alternativeData.isTradeable && !it.inaccessible
             }.drawEt() ?: return@repeat
             val level = random(1, drawEt.alternativeData.getTradeLevelLimit(drawEt.basicData.maxLevel, maxLevelLimit))
             result.addEt(drawEt, level)

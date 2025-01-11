@@ -109,6 +109,9 @@ interface AiyatsbusEnchantment {
      */
     val trigger: Trigger?
 
+    val inaccessible: Boolean
+        get() = alternativeData.inaccessible || rarity.inaccessible
+
     fun conflictsWith(other: Enchantment): Boolean {
         return limitations.conflictsWith(other)
     }
