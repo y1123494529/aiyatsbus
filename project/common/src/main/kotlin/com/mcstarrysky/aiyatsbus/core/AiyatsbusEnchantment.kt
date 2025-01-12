@@ -110,7 +110,9 @@ interface AiyatsbusEnchantment {
     val trigger: Trigger?
 
     val inaccessible: Boolean
-        get() = alternativeData.inaccessible || rarity.inaccessible
+        get() = alternativeData.inaccessible ||
+                rarity.inaccessible ||
+                aiyatsbusGroups.filter { enchantment.isInGroup(it.value) }.any { it.value.inaccessible }
 
     fun conflictsWith(other: Enchantment): Boolean {
         return limitations.conflictsWith(other)

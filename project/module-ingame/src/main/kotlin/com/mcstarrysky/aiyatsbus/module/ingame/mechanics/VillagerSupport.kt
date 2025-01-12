@@ -77,7 +77,7 @@ object VillagerSupport {
             e.isCancelled = true
 
         origin.run origin@{
-            e.recipe = (if (MinecraftVersion.majorLegacy >= 11801) {
+            e.recipe = (if (MinecraftVersion.versionId >= 11801) {
                 MerchantRecipe(
                     result,
                     uses,
