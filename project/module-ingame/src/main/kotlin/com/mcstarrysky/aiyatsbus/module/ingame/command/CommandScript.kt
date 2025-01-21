@@ -39,17 +39,17 @@ import taboolib.module.kether.KetherShell
 import taboolib.module.kether.ScriptContext
 import taboolib.module.kether.printKetherErrorMessage
 
-@CommandHeader(name = "aiyatsbusscript", aliases = ["aiscript"], permission = "aiyatsbus.command")
+@CommandHeader(name = "aiyatsbusscript", aliases = ["aiscript"], permission = "aiyatsbus.script.command")
 object CommandScript {
 
     val workspace by lazy { ScriptWorkspace.workspace }
 
-    @CommandBody
+    @CommandBody(permission = "aiyatsbus.script.command")
     val main = mainCommand {
         createTabooLegacyHelper("script")
     }
 
-    @CommandBody
+    @CommandBody(permission = "aiyatsbus.script.command.run")
     val run = subCommand {
         // script
         dynamic(comment = "file") {
@@ -77,7 +77,7 @@ object CommandScript {
         }
     }
 
-    @CommandBody
+    @CommandBody(permission = "aiyatsbus.script.command.stop")
     val stop = subCommand {
         dynamic(comment = "file", optional = true) {
             suggestion<CommandSender> { _, _ ->
@@ -86,6 +86,7 @@ object CommandScript {
             execute<CommandSender> { sender, _, argument ->
                 if (!sender.isOp) {
                     sender.sendMessage("§c§l[Aiyatsbus] §7You do not have permission.")
+                    return@execute
                 }
                 val script = workspace.getRunningScript().filter { it.quest.id == argument }
                 if (script.isNotEmpty()) {
@@ -98,16 +99,18 @@ object CommandScript {
         execute<CommandSender> { sender, _, _ ->
             if (!sender.isOp) {
                 sender.sendMessage("§c§l[Aiyatsbus] §7You do not have permission.")
+                return@execute
             }
             workspace.getRunningScript().forEach { workspace.terminateScript(it) }
         }
     }
 
-    @CommandBody
+    @CommandBody(permission = "aiyatsbus.script.command.list")
     val list = subCommand {
         execute<CommandSender> { sender, _, _ ->
             if (!sender.isOp) {
                 sender.sendMessage("§c§l[Aiyatsbus] §7You do not have permission.")
+                return@execute
             }
             sender.sendLang("command-script-list-all",
                 workspace.scripts.map { it.value.id }.joinToString(", "),
@@ -116,11 +119,12 @@ object CommandScript {
         }
     }
 
-    @CommandBody
+    @CommandBody(permission = "aiyatsbus.script.command.reload")
     val reload = subCommand {
         execute<CommandSender> { sender, _, _ ->
             if (!sender.isOp) {
                 sender.sendMessage("§c§l[Aiyatsbus] §7You do not have permission.")
+                return@execute
             }
             workspace.cancelAll()
             workspace.loadAll()
@@ -128,11 +132,12 @@ object CommandScript {
         }
     }
 
-    @CommandBody
+    @CommandBody(permission = "aiyatsbus.script.command.debug")
     val debug = subCommand {
         execute<CommandSender> { sender, _, _ ->
             if (!sender.isOp) {
                 sender.sendMessage("§c§l[Aiyatsbus] §7You do not have permission.")
+                return@execute
             }
             sender.sendMessage(" §5§l‹ ›§f §7RegisteredActions:")
             Kether.scriptRegistry.registeredNamespace.forEach {
@@ -141,11 +146,12 @@ object CommandScript {
         }
     }
 
-    @CommandBody
+    @CommandBody(permission = "aiyatsbus.script.command.containers")
     val containers = subCommand {
         execute<CommandSender> { sender, _, _ ->
             if (!sender.isOp) {
                 sender.sendMessage("§c§l[Aiyatsbus] §7You do not have permission.")
+                return@execute
             }
             getOpenContainers().forEach { it ->
                 sender.sendMessage(" §5§l‹ ›§f §7${it.name} §8${it.javaClass.simpleName}")
@@ -154,12 +160,13 @@ object CommandScript {
         }
     }
 
-    @CommandBody
+    @CommandBody(permission = "aiyatsbus.script.command.invoke")
     val invoke = subCommand {
         dynamic(comment = "script") {
             execute<CommandSender> { sender, _, argument ->
                 if (!sender.isOp) {
                     sender.sendMessage("§c§l[Aiyatsbus] §7You do not have permission.")
+                    return@execute
                 }
                 try {
                     KetherShell.eval(
@@ -186,6 +193,7 @@ object CommandScript {
     fun commandRun(sender: CommandSender, file: String, viewer: String? = null, args: Array<String> = emptyArray()) {
         if (!sender.isOp) {
             sender.sendMessage("§c§l[Aiyatsbus] §7You do not have permission.")
+            return
         }
         val script = workspace.scripts[file]
         if (script != null) {
