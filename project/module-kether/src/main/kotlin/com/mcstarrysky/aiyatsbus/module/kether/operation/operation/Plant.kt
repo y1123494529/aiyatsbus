@@ -24,6 +24,7 @@ import org.bukkit.Material
 import org.bukkit.block.data.Ageable
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import taboolib.platform.util.hasItem
 import taboolib.platform.util.takeItem
 
 /**
@@ -77,6 +78,7 @@ object Plant {
                 if (!AntiGriefChecker.canBreak(player, planted.location))
                     continue
                 if (planted.type != Material.AIR) continue // 防止左右手打架
+                if (!player.inventory.hasItem(1) { it.type == type }) continue
                 if (player.placeBlock(planted, ItemStack(type, 1))) {
                     planted.type = Material.valueOf(seedsMap[type.name]!!)
                     val data = planted.blockData as Ageable
