@@ -21,6 +21,7 @@ package com.mcstarrysky.aiyatsbus.impl
 import com.mcstarrysky.aiyatsbus.core.*
 import com.mcstarrysky.aiyatsbus.core.util.*
 import org.bukkit.GameMode
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -163,7 +164,7 @@ class DefaultAiyatsbusDisplayManager : AiyatsbusDisplayManager {
             }
             // 设置显示 Lore
             lore = result
-            if (!hasCustomModelData()) {
+            if (item.type == Material.ENCHANTED_BOOK && !hasCustomModelData()) {
                 val rarity = item.fixedEnchants.minBy { it.key.rarity.weight }.key.rarity
                 if (rarity.isCustomModelBookEnabled) {
                     setCustomModelData(rarity.customModelBook)

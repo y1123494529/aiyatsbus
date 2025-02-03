@@ -25,6 +25,8 @@ package com.mcstarrysky.aiyatsbus.core
  */
 object Aiyatsbus {
 
+    const val VERSION_ID = 0
+
     private var api: AiyatsbusAPI? = null
 
     fun api(): AiyatsbusAPI {
