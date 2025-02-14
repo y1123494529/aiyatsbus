@@ -163,6 +163,8 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
         fun init() {
             PlatformFactory.registerAPI<AiyatsbusEnchantmentManager>(DefaultAiyatsbusEnchantmentManager())
             val registerer: ModernEnchantmentRegisterer = when {
+                // 无需缓存
+                MinecraftVersion.versionId >= 12104 -> nmsProxy("cc.polarastrum.aiyatsbus.impl.registration.v12104_nms.DefaultModernEnchantmentRegisterer")
                 MinecraftVersion.versionId >= 12102 -> nmsProxy("cc.polarastrum.aiyatsbus.impl.registration.v12103_nms.DefaultModernEnchantmentRegisterer")
                 MinecraftVersion.versionId >= 12100 -> nmsProxy("cc.polarastrum.aiyatsbus.impl.registration.v12100_nms.DefaultModernEnchantmentRegisterer")
                 MinecraftVersion.versionId >= 12005 -> throw UnsupportedVersionException()

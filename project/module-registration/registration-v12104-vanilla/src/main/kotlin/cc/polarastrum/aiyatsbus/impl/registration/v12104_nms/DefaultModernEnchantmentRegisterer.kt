@@ -16,14 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.impl.registration.v12100_nms
+package cc.polarastrum.aiyatsbus.impl.registration.v12104_nms
 
 import cc.polarastrum.aiyatsbus.core.Aiyatsbus
 import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantment
 import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantmentBase
 import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantmentManager
 import cc.polarastrum.aiyatsbus.core.registration.modern.ModernEnchantmentRegisterer
-import cc.polarastrum.aiyatsbus.impl.registration.v12100_paper.EnchantmentHelper
+import cc.polarastrum.aiyatsbus.impl.registration.v12104_paper.EnchantmentHelper
+import io.papermc.paper.registry.entry.RegistryTypeMapper
+import io.papermc.paper.registry.legacy.DelayedRegistry
 import net.minecraft.core.*
 import net.minecraft.core.component.DataComponentMap
 import net.minecraft.core.registries.Registries
@@ -31,46 +33,50 @@ import net.minecraft.network.chat.IChatBaseComponent
 import net.minecraft.resources.MinecraftKey
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
-import org.bukkit.craftbukkit.v1_21_R1.CraftRegistry
-import org.bukkit.craftbukkit.v1_21_R1.CraftServer
-import org.bukkit.craftbukkit.v1_21_R1.enchantments.CraftEnchantment
-import org.bukkit.craftbukkit.v1_21_R1.util.CraftNamespacedKey
+import org.bukkit.craftbukkit.v1_21_R3.CraftRegistry
+import org.bukkit.craftbukkit.v1_21_R3.CraftServer
+import org.bukkit.craftbukkit.v1_21_R3.enchantments.CraftEnchantment
+import org.bukkit.craftbukkit.v1_21_R3.util.CraftNamespacedKey
 import org.bukkit.enchantments.Enchantment
 import taboolib.common.platform.PlatformFactory
 import taboolib.library.reflex.Reflex.Companion.getProperty
+import java.lang.reflect.Modifier
 import java.util.*
 import java.util.function.BiFunction
+import javax.annotation.Nullable
 
 /**
- * Aiyatsbus
- * com.mcstarrysky.aiyatsbus.impl.registration.modern.DefaultModernEnchantmentRegisterer
+ * NOTICE 不再支持 spigot
  *
  * @author mical
  * @since 2024/2/17 17:28
  */
 class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
 
-    private val enchantmentRegistry = ((Bukkit.getServer() as CraftServer).server
-        .registryAccess() as IRegistryCustom)
-        .registryOrThrow(Registries.ENCHANTMENT)
+    private val enchantmentRegistry = (Bukkit.getServer() as CraftServer).server
+        .registryAccess()
+        .lookupOrThrow(Registries.ENCHANTMENT)
 
-    private val bukkitRegistry = org.bukkit.Registry.ENCHANTMENT
+    private val bukkitRegistry = (org.bukkit.Registry.ENCHANTMENT as DelayedRegistry<Enchantment, *>).delegate()
 
     private val frozenField = RegistryMaterials::class.java
         .declaredFields
         .filter { it.type.isPrimitive }[0]
         .apply { isAccessible = true }
 
+    private val allTags = RegistryMaterials::class.java
+        .declaredFields
+        .filter { it.type.name.contains("TagSet") }[0]
+        .apply { isAccessible = true }
+
     private val unregisteredIntrusiveHoldersField = RegistryMaterials::class.java
         .declaredFields
-        .last { it.type == Map::class.java }
+        .filter { it.type == Map::class.java }
+        .filter { it.isAnnotationPresent(Nullable::class.java) }[0]
         .apply { isAccessible = true }
 
-    private val minecraftToBukkit = bukkitRegistry::class.java
-        .getDeclaredField("minecraftToBukkit")
-        .apply { isAccessible = true }
-
-    private val minecraftToBukkitAlt = CraftRegistry::class.java
+    // 1.21.4+ only has minecraftToBukkit in CraftRegistry, removing the duplicate in WritableCraftRegistry
+    private val minecraftToBukkit = CraftRegistry::class.java
         .getDeclaredField("minecraftToBukkit")
         .apply { isAccessible = true }
 
@@ -82,20 +88,23 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
         val api = PlatformFactory.getAPI<AiyatsbusEnchantmentManager>()
 
         val newRegistryMTB =
-            BiFunction<NamespacedKey, NMSEnchantment, Enchantment> { key, registry ->
+            BiFunction<NamespacedKey, NMSEnchantment, Enchantment?> { key, registry ->
                 val isVanilla = enchantmentRegistry.containsKey(CraftNamespacedKey.toMinecraft(key))
                 val aiyatsbus = api.getEnchant(key)
 
                 if (isVanilla) {
-                    CraftEnchantment(key, registry)
+                    EnchantmentHelper.createCraftEnchantment(enchantmentRegistry.get(CraftNamespacedKey.toMinecraft(key)).get())
                 } else if (aiyatsbus != null) {
                     aiyatsbus as Enchantment
                 } else null
             }
 
         // Update bukkit registry
-        minecraftToBukkit.set(bukkitRegistry, newRegistryMTB)
-        minecraftToBukkitAlt.set(bukkitRegistry, newRegistryMTB)
+        @Suppress("UNCHECKED_CAST")
+        minecraftToBukkit.set(
+            bukkitRegistry,
+            RegistryTypeMapper(newRegistryMTB as BiFunction<NamespacedKey, NMSEnchantment, Enchantment>)
+        )
 
         // Clear the enchantment cache
         cache.set(bukkitRegistry, mutableMapOf<NamespacedKey, Enchantment>())
@@ -103,6 +112,21 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
         // Unfreeze NMS registry
         frozenField.set(enchantmentRegistry, false)
         unregisteredIntrusiveHoldersField.set(enchantmentRegistry, IdentityHashMap<NMSEnchantment, Holder.c<NMSEnchantment>>())
+
+        /*
+        Creating an unbound tag set requires using reflection because the inner class is
+        package-private, so we just find the method manually.
+         */
+
+        val unboundTagSet = RegistryMaterials::class.java
+            .declaredClasses[0]
+            .declaredMethods
+            .filter { Modifier.isStatic(it.modifiers) }
+            .filter { it.parameterCount == 0 }[0]
+            .apply { isAccessible = true }
+            .invoke(null)
+
+        allTags.set(enchantmentRegistry, unboundTagSet)
     }
 
     override fun register(enchant: AiyatsbusEnchantmentBase): Enchantment {
@@ -112,15 +136,14 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
         if (enchantmentRegistry.containsKey(CraftNamespacedKey.toMinecraft(enchant.enchantmentKey))) {
             val nms = enchantmentRegistry[CraftNamespacedKey.toMinecraft(enchant.enchantmentKey)]
 
-            if (nms != null) {
-                 return EnchantmentHelper.createCraftEnchantment(enchant, nms) as CraftEnchantment
+            if (nms.isPresent) {
+                return EnchantmentHelper.createAiyatsbusCraftEnchantment(enchant, nms.get()) as CraftEnchantment
             } else {
                 throw IllegalStateException("Enchantment ${enchant.id} wasn't registered")
             }
         }
 
         val vanillaEnchantment = vanillaEnchantment(enchant)
-
 
         enchantmentRegistry.createIntrusiveHolder(vanillaEnchantment)
 

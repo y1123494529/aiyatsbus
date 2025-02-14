@@ -18,13 +18,16 @@
  */
 package cc.polarastrum.aiyatsbus.impl.registration.v12103_nms
 
+import cc.polarastrum.aiyatsbus.core.Aiyatsbus
 import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantment
 import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantmentBase
 import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantmentManager
 import cc.polarastrum.aiyatsbus.core.registration.modern.ModernEnchantmentRegisterer
 import cc.polarastrum.aiyatsbus.impl.registration.v12103_paper.EnchantmentHelper
 import net.minecraft.core.*
+import net.minecraft.core.component.DataComponentMap
 import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.IChatBaseComponent
 import net.minecraft.resources.MinecraftKey
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
@@ -34,6 +37,7 @@ import org.bukkit.craftbukkit.v1_21_R2.enchantments.CraftEnchantment
 import org.bukkit.craftbukkit.v1_21_R2.util.CraftNamespacedKey
 import org.bukkit.enchantments.Enchantment
 import taboolib.common.platform.PlatformFactory
+import taboolib.library.reflex.Reflex.Companion.getProperty
 import java.lang.reflect.Modifier
 import java.util.*
 import java.util.function.BiFunction
@@ -165,8 +169,15 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
                 0,
             )
         )
-        return enchantment.build(MinecraftKey.withDefaultNamespace(enchant.id))
+//        return enchantment.build(MinecraftKey.withDefaultNamespace(enchant.id))
+        return NMSEnchantment(
+            Aiyatsbus.api().getMinecraftAPI().componentFromJson(enchant.basicData.name) as IChatBaseComponent,
+            enchantment.getProperty<NMSEnchantmentC>("definition")!!,
+            enchantment.getProperty<HolderSet<NMSEnchantment>>("exclusiveSet")!!,
+            enchantment.getProperty<DataComponentMap.a>("effectMapBuilder")!!.build()
+        )
     }
 }
 
 typealias NMSEnchantment = net.minecraft.world.item.enchantment.Enchantment
+typealias NMSEnchantmentC = net.minecraft.world.item.enchantment.Enchantment.c

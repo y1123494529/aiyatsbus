@@ -32,7 +32,8 @@ import taboolib.library.configuration.ConfigurationSection
 class EventMapping @JvmOverloads constructor(
     private val root: ConfigurationSection,
 
-    val clazz: String = root.getString("class")!!,
+    val clazz: String = root.getString("class")!!
+        .replace("com.mcstarrysky.aiyatsbus", "cc.polarastrum.aiyatsbus"), // 自己给自己挖了一个大坑
 
     val slots: List<EquipmentSlot> = if (root.isList("slots")) root.getStringList("slots")
         .mapNotNull { it.enumOf<EquipmentSlot>() } else listOfNotNull(

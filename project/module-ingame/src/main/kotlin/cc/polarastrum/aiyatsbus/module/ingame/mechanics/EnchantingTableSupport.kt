@@ -48,6 +48,11 @@ import taboolib.module.ui.InventoryViewProxy
 object EnchantingTableSupport {
 
     /**
+     * 是否为数据驱动附魔
+     */
+    private val dataDrivenEnchantment = MinecraftVersion.isHigherOrEqual(MinecraftVersion.V1_21)
+
+    /**
      * 记录的等级 位置 to 等级
      */
     private val shelfAmount = mutableMapOf<String, Int>()
@@ -71,6 +76,8 @@ object EnchantingTableSupport {
     /**
      * 开启悬停显示, 必出悬停原版附魔
      * 关闭时则关闭悬停显示, 一切附魔按权重随机
+     *
+     * 该选项在 1.21 以上版本无效
      */
     @ConfigNode("vanilla_mode")
     var vanillaMode = false
@@ -139,6 +146,11 @@ object EnchantingTableSupport {
          *
          * https://wiki.vg/Protocol#Set_Container_Property
          */
+
+        // 1.20.4 以上版本不隐藏附魔选项
+        if (dataDrivenEnchantment) {
+            return
+        }
         if (e.packet.name == "PacketPlayOutWindowData" || e.packet.name == "ClientboundContainerSetDataPacket") {
             try {
 //                val containerId = e.packet.read<Int>(if (MinecraftVersion.isUniversal) "containerId" else "a", MinecraftVersion.isUniversal)
@@ -164,10 +176,17 @@ object EnchantingTableSupport {
             return
         val location = event.enchantBlock.location.serialized
         // 记录附魔台的书架等级
-        shelfAmount[location] = event.enchantmentBonus.coerceAtMost(16)
+        val bonus = event.enchantmentBonus.coerceAtMost(16)
+        shelfAmount[location] = bonus
         // 记录附魔台三个附魔选项
-        for (i in 0..2) {
-            enchantmentOffers[location] = event.offers.toList()
+        enchantmentOffers[location] = event.offers.toList()
+        if (dataDrivenEnchantment) {
+            // 预先为所有附魔项生成一个附魔
+            val enchants = doPrepareEnchant(event.enchanter, event.item, bonus)
+            for (i in 0..2) {
+                event.offers[i]?.enchantment = enchants[i]!!.first.enchantment
+                event.offers[i]?.enchantmentLevel = enchants[i]!!.second
+            }
         }
     }
 
@@ -191,7 +210,7 @@ object EnchantingTableSupport {
         val enchantmentHintLevel = if (player.hasPermission(fullLevelPrivilege)) {
             enchantmentOfferHint.enchantment.maxLevel
         } else enchantmentOfferHint.enchantmentLevel
-        if (vanillaMode) {
+        if (vanillaMode || dataDrivenEnchantment) {
             item.addEt(enchantmentOfferHint.enchantment.aiyatsbusEt, enchantmentHintLevel)
         }
 
@@ -201,7 +220,7 @@ object EnchantingTableSupport {
         // 清空附魔列表
         event.enchantsToAdd.clear()
         // 添加悬停信息上的附魔
-        if (vanillaMode) {
+        if (vanillaMode || dataDrivenEnchantment) {
             event.enchantsToAdd += enchantmentOfferHint.enchantment to enchantmentHintLevel
         }
         // 添加随机出来的附魔
@@ -214,6 +233,43 @@ object EnchantingTableSupport {
                 event.inventory.setItem(0, result.second)
             }
         }
+    }
+
+    /**
+     * 预先生成一个附魔
+     */
+    private fun doPrepareEnchant(
+        player: Player,
+        item: ItemStack,
+        bonus: Int
+    ): Map<Int, Pair<AiyatsbusEnchantment, Int>> {
+        val pool = item.etsAvailable(CheckType.ATTAIN, player).filterNot { it.alternativeData.isTreasure }
+        val result = LinkedHashMap<Int, Pair<AiyatsbusEnchantment, Int>>()
+        for (i in 0..2) {
+            // 从特定附魔列表中根据品质和附魔的权重抽取一个附魔
+            while (true) {
+                val enchant = pool.drawEt() ?: continue
+                val maxLevel = enchant.basicData.maxLevel
+                val limit = enchant.alternativeData.getEnchantMaxLevelLimit(maxLevel, maxLevelLimit)
+
+                val level = if (player.hasPermission(fullLevelPrivilege)) maxLevel else levelFormula.calcToInt(
+                    "bonus" to bonus,
+                    "max_level" to limit,
+                    "button" to i + 1
+                ).coerceIn(1, limit)
+
+                if (result.values.any { it.first == enchant && it.second == level }) {
+                    continue
+                }
+
+                if (enchant.limitations.checkAvailable(CheckType.ATTAIN, item, player).isFailure) {
+                    continue
+                }
+                result += i to (enchant to level)
+                break
+            }
+        }
+        return result
     }
 
     /**
@@ -267,7 +323,7 @@ object EnchantingTableSupport {
                 break
             }
         }
-        return count + if (vanillaMode) 0 else 1
+        return count + if (vanillaMode || dataDrivenEnchantment) 0 else 1
     }
 
     /**

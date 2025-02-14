@@ -49,6 +49,8 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
 
     private val enchantmentRegisterer0: AiyatsbusEnchantmentRegisterer by lazy {
         when {
+            MinecraftVersion.versionId >= 12104 ->
+                proxy<ModernEnchantmentRegisterer>("cc.polarastrum.aiyatsbus.impl.registration.v12104_nms.DefaultModernEnchantmentRegisterer")
             MinecraftVersion.versionId >= 12102 ->
                 proxy<ModernEnchantmentRegisterer>("cc.polarastrum.aiyatsbus.impl.registration.v12103_nms.DefaultModernEnchantmentRegisterer")
             MinecraftVersion.versionId >= 12100 ->
