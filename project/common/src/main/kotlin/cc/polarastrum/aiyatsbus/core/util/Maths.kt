@@ -25,6 +25,7 @@ import taboolib.common.platform.function.warning
 import taboolib.common.util.random
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.random.Random
 
 /**
  * Aiyatsbus
@@ -117,6 +118,18 @@ object MathUtils {
             error("evaluating", this, variables, values, it)
             0.0
         } ?: 0.0
+    }
+
+    fun <T> Map<T, Int>.selectByWeight(random: Random): T? {
+        val total = values.sum()
+        if (total <= 0) return null
+
+        var accumulator = 0
+        val target = random.nextInt(total)
+        return entries.firstOrNull { entry ->
+            accumulator += entry.value
+            accumulator > target
+        }?.key
     }
 
     private fun error(action: String, expression: String, variables: List<String>, values: DoubleArray, error: Throwable) {

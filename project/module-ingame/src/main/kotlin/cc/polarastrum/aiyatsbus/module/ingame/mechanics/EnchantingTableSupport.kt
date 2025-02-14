@@ -21,6 +21,7 @@ package cc.polarastrum.aiyatsbus.module.ingame.mechanics
 import cc.polarastrum.aiyatsbus.core.*
 import cc.polarastrum.aiyatsbus.core.data.CheckType
 import cc.polarastrum.aiyatsbus.core.util.MathUtils.preheatExpression
+import cc.polarastrum.aiyatsbus.core.util.MathUtils.selectByWeight
 import cc.polarastrum.aiyatsbus.core.util.calcToDouble
 import cc.polarastrum.aiyatsbus.core.util.calcToInt
 import cc.polarastrum.aiyatsbus.core.util.serialized
@@ -36,6 +37,7 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
 import taboolib.common.util.randomDouble
+import taboolib.common5.RandomList
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigNode
 import taboolib.module.configuration.Configuration
@@ -43,6 +45,8 @@ import taboolib.module.configuration.conversion
 import taboolib.module.nms.MinecraftVersion
 import taboolib.module.nms.PacketSendEvent
 import taboolib.module.ui.InventoryViewProxy
+import taboolib.platform.util.serializeToByteArray
+import kotlin.random.Random
 
 @ConfigNode(bind = "core/mechanisms/enchanting_table.yml")
 object EnchantingTableSupport {
@@ -243,12 +247,26 @@ object EnchantingTableSupport {
         item: ItemStack,
         bonus: Int
     ): Map<Int, Pair<AiyatsbusEnchantment, Int>> {
+        fun Collection<AiyatsbusEnchantment>.drawEt(seed: Long): AiyatsbusEnchantment? {
+            val random = Random(seed)
+
+            return groupBy { it.rarity }
+                .mapValues { (_, v) -> v.sumOf { it.rarity.weight } }
+                .selectByWeight(random)
+                ?.let { targetRarity ->
+                    filter { it.rarity == targetRarity }
+                        .associateWith { it.alternativeData.weight }
+                        .selectByWeight(random)
+                }
+        }
+
+        val seed = item.serializeToByteArray().sum() + player.world.seed // 生成一个本次随机用到的种子
         val pool = item.etsAvailable(CheckType.ATTAIN, player).filterNot { it.alternativeData.isTreasure }
         val result = LinkedHashMap<Int, Pair<AiyatsbusEnchantment, Int>>()
         for (i in 0..2) {
             // 从特定附魔列表中根据品质和附魔的权重抽取一个附魔
             while (true) {
-                val enchant = pool.drawEt() ?: continue
+                val enchant = pool.drawEt(seed + i) ?: continue
                 val maxLevel = enchant.basicData.maxLevel
                 val limit = enchant.alternativeData.getEnchantMaxLevelLimit(maxLevel, maxLevelLimit)
 
@@ -258,9 +276,9 @@ object EnchantingTableSupport {
                     "button" to i + 1
                 ).coerceIn(1, limit)
 
-                if (result.values.any { it.first == enchant && it.second == level }) {
-                    continue
-                }
+//                if (result.values.any { it.first == enchant && it.second == level }) {
+//                    continue
+//                } 原版就会重复
 
                 if (enchant.limitations.checkAvailable(CheckType.ATTAIN, item, player).isFailure) {
                     continue
