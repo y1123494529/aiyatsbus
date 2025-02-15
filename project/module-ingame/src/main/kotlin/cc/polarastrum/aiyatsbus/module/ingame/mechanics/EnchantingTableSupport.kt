@@ -35,6 +35,7 @@ import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.ItemStack
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.info
 import taboolib.common.platform.function.submit
 import taboolib.common.util.randomDouble
 import taboolib.common5.RandomList
@@ -247,9 +248,7 @@ object EnchantingTableSupport {
         item: ItemStack,
         bonus: Int
     ): Map<Int, Pair<AiyatsbusEnchantment, Int>> {
-        fun Collection<AiyatsbusEnchantment>.drawEt(seed: Long): AiyatsbusEnchantment? {
-            val random = Random(seed)
-
+        fun Collection<AiyatsbusEnchantment>.drawEt(random: Random): AiyatsbusEnchantment? {
             return groupBy { it.rarity }
                 .mapValues { (_, v) -> v.sumOf { it.rarity.weight } }
                 .selectByWeight(random)
@@ -260,13 +259,13 @@ object EnchantingTableSupport {
                 }
         }
 
-        val seed = item.serializeToByteArray().sum() + player.world.seed // 生成一个本次随机用到的种子
+        val random = Random(item.serializeToByteArray().sum() + player.world.seed + player.enchantmentSeed )
         val pool = item.etsAvailable(CheckType.ATTAIN, player).filterNot { it.alternativeData.isTreasure }
         val result = LinkedHashMap<Int, Pair<AiyatsbusEnchantment, Int>>()
         for (i in 0..2) {
             // 从特定附魔列表中根据品质和附魔的权重抽取一个附魔
             while (true) {
-                val enchant = pool.drawEt(seed + i) ?: continue
+                val enchant = pool.drawEt(random) ?: continue
                 val maxLevel = enchant.basicData.maxLevel
                 val limit = enchant.alternativeData.getEnchantMaxLevelLimit(maxLevel, maxLevelLimit)
 
