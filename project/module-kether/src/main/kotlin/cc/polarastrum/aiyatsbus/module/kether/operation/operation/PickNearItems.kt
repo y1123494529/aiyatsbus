@@ -47,7 +47,7 @@ object PickNearItems {
     fun pickNearItems(player: Player, location: Location, checkRadius: Int, checkDelay: Long) {
         submit(delay = checkDelay) {
             for (item in location.getNearbyEntitiesByType(Item::class.java, checkRadius.toDouble())) {
-                if (GuardItemChecker.checkIsGuardItem(item.itemStack)) continue
+                if (GuardItemChecker.checkIsGuardItem(item, player)) continue
                 if (canFitItem(player, item.itemStack)) item.remove()
             }
         }
