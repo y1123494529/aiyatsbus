@@ -54,6 +54,8 @@ interface GuardItemChecker {
         }
 
         /**
+         * TODO: 以下工具类未来会挪位置
+         *
          * 计算玩家背包剩余容量
          *
          * @param player 玩家
