@@ -45,8 +45,8 @@ interface GuardItemChecker {
          * 原本为 QuickShop 的两个分支而设计, 现在任何插件都可以来做适配
          */
         fun checkIsGuardItem(item: Item, player: Player): Boolean {
-            if (!item.canPlayerPickup()) return false
-            if (eventCanceled(item, player)) return false
+            if (!item.canPlayerPickup()) return true
+            if (eventCanceled(item, player)) return true
             return registeredIntegrations.isNotEmpty() &&
                     registeredIntegrations.all { it.checkIsGuardItem(item) }
         }
