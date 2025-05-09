@@ -52,33 +52,40 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
 
-    private val values = ConcurrentHashMap<NamespacedKey, AiyatsbusEnchantment>()
+    private val byKeyMap = ConcurrentHashMap<NamespacedKey, AiyatsbusEnchantment>()
+    private val byKeyStringMap = ConcurrentHashMap<String, AiyatsbusEnchantment>()
+    private val byNameMap = ConcurrentHashMap<String, AiyatsbusEnchantment>()
 
     override fun getEnchants(): Map<NamespacedKey, AiyatsbusEnchantment> {
-        return values
+        return byKeyMap
     }
 
     override fun getEnchant(key: NamespacedKey): AiyatsbusEnchantment? {
-        return getEnchant(key.key)
+        return byKeyMap[key]
     }
 
     override fun getEnchant(key: String): AiyatsbusEnchantment? {
-        return values.values.firstOrNull { it.basicData.id == key }
+        return byKeyStringMap[key]
     }
 
     override fun getByName(name: String): AiyatsbusEnchantment? {
-        return values.values.firstOrNull { it.basicData.name == name }
+        return byNameMap[name]
     }
 
     override fun register(enchantment: AiyatsbusEnchantmentBase) {
-        values[enchantment.enchantmentKey] = Aiyatsbus.api().getEnchantmentRegisterer().register(enchantment) as AiyatsbusEnchantment
+        val ench = Aiyatsbus.api().getEnchantmentRegisterer().register(enchantment) as AiyatsbusEnchantment
+        byKeyMap[enchantment.enchantmentKey] = ench
+        byKeyStringMap[enchantment.basicData.id] = ench
+        byNameMap[enchantment.basicData.name] = ench
         EnchantRegistrationHooks.registerHooks()
     }
 
     override fun unregister(enchantment: AiyatsbusEnchantment) {
         enchantment.trigger?.onDisable()
         Aiyatsbus.api().getEnchantmentRegisterer().unregister(enchantment)
-        values -= enchantment.enchantmentKey
+        byKeyMap -= enchantment.enchantmentKey
+        byKeyStringMap -= enchantment.basicData.id
+        byNameMap -= enchantment.basicData.name
     }
 
     override fun loadEnchantments() {
@@ -104,7 +111,7 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
             .flatten()
             .forEach(::loadFromFile)
 
-        console().sendLang("loading-enchantments", values.size, System.currentTimeMillis() - time)
+        console().sendLang("loading-enchantments", byKeyMap.size, System.currentTimeMillis() - time)
     }
 
     override fun loadFromFile(file: File) {
@@ -150,7 +157,7 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
     }
 
     override fun clearEnchantments() {
-        for (enchant in values.values) {
+        for (enchant in byKeyMap.values) {
             enchant.file.isProcessingByWatcher = false
             enchant.file.unwatch()
             unregister(enchant)
