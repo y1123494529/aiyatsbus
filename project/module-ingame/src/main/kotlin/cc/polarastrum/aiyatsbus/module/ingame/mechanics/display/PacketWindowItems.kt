@@ -33,7 +33,7 @@ import taboolib.module.nms.PacketSendEvent
  */
 object PacketWindowItems {
 
-    @SubscribeEvent(priority = EventPriority.MONITOR)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     fun e(e: PacketSendEvent) {
         if (e.packet.name == "PacketPlayOutWindowItems" || e.packet.name == "ClientboundContainerSetContentPacket") {
             try {

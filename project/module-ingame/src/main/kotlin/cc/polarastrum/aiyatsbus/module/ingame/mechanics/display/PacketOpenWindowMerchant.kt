@@ -31,7 +31,7 @@ import taboolib.module.nms.PacketSendEvent
  */
 object PacketOpenWindowMerchant {
 
-    @SubscribeEvent(priority = EventPriority.MONITOR)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     fun e(e: PacketSendEvent) {
         if (e.packet.name == "PacketPlayOutOpenWindowMerchant" || e.packet.name == "ClientboundMerchantOffersPacket") {
             try {
