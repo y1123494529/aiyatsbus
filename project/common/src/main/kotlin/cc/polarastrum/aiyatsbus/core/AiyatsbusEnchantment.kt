@@ -20,6 +20,7 @@ import cc.polarastrum.aiyatsbus.core.data.*
 import cc.polarastrum.aiyatsbus.core.data.registry.Target
 import cc.polarastrum.aiyatsbus.core.data.registry.Rarity
 import cc.polarastrum.aiyatsbus.core.data.trigger.Trigger
+import cc.polarastrum.aiyatsbus.core.util.Function2
 import cc.polarastrum.aiyatsbus.core.util.roman
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
@@ -88,6 +89,8 @@ interface AiyatsbusEnchantment {
      * 附魔的变量显示与替换
      */
     val variables: Variables
+
+    val outsideVariables: Map<String, Function2<Int, String>>
 
     /**
      * 附魔显示

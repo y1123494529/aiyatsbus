@@ -96,6 +96,7 @@ data class Displayer(
     ): Map<String, String> {
         val tmp = enchant.variables.variables(level, item, true)
             .mapValues { it.value.toString() }.toMutableMap() // 因为是显示, 这里的变量可以直接转为字符串
+        tmp.putAll(enchant.outsideVariables.mapValues { it.value.apply(level) })
         val lv = level ?: enchant.basicData.maxLevel
         tmp["id"] = enchant.basicData.id
         tmp["name"] = enchant.basicData.name

@@ -22,6 +22,7 @@ import cc.polarastrum.aiyatsbus.core.data.*
 import cc.polarastrum.aiyatsbus.core.data.registry.Target
 import cc.polarastrum.aiyatsbus.core.data.registry.Rarity
 import cc.polarastrum.aiyatsbus.core.data.trigger.Trigger
+import cc.polarastrum.aiyatsbus.core.util.Function2
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
 import taboolib.common.util.unsafeLazy
@@ -56,6 +57,8 @@ abstract class AiyatsbusEnchantmentBase(
             ?: cc.polarastrum.aiyatsbus.core.aiyatsbusRarity(AiyatsbusSettings.defaultRarity) ?: error("Enchantment $id has an unknown rarity")
 
     override val variables: Variables = Variables(config.getConfigurationSection("variables"))
+
+    override val outsideVariables: Map<String, Function2<Int, String>> = mutableMapOf();
 
     override val targets: List<Target>
         get() = config.getStringList("targets").mapNotNull(::aiyatsbusTarget)
