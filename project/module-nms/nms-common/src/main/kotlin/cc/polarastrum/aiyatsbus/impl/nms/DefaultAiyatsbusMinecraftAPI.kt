@@ -153,11 +153,13 @@ class DefaultAiyatsbusMinecraftAPI : AiyatsbusMinecraftAPI {
     }
 
     override fun componentToJson(iChatBaseComponent: Any): String {
-        if (iChatBaseComponent is io.papermc.paper.adventure.AdventureComponent) {
-            return GsonComponentSerializer.gson().serialize(
-                iChatBaseComponent.`adventure$component`()
-            )
-        }
+        try {
+            if (iChatBaseComponent is io.papermc.paper.adventure.AdventureComponent) {
+                return GsonComponentSerializer.gson().serialize(
+                    iChatBaseComponent.`adventure$component`()
+                )
+            }
+        } catch (_: Throwable) { }
         return CraftChatMessage16.toJSON(iChatBaseComponent as NMS16IChatBaseComponent)
     }
 
