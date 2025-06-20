@@ -90,7 +90,10 @@ interface AiyatsbusEnchantment {
      */
     val variables: Variables
 
-    val outsideVariables: Map<String, Function2<Int, String>>
+    /**
+     * 附属的自定义变量
+     */
+    val customVariabales: Map<String, Function2<Int, String>>
 
     /**
      * 附魔显示

@@ -58,7 +58,7 @@ abstract class AiyatsbusEnchantmentBase(
 
     override val variables: Variables = Variables(config.getConfigurationSection("variables"))
 
-    override val outsideVariables: Map<String, Function2<Int, String>> = mutableMapOf();
+    override val customVariabales: Map<String, Function2<Int, String>> = mutableMapOf();
 
     override val targets: List<Target>
         get() = config.getStringList("targets").mapNotNull(::aiyatsbusTarget)
