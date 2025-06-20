@@ -1,60 +1,47 @@
+@file:Suppress("PropertyName", "SpellCheckingInspection")
+
 import io.izzel.taboolib.gradle.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    `maven-publish`
     java
-    id("io.izzel.taboolib") version "2.0.23"
-    id("org.jetbrains.kotlin.jvm") version "1.8.22"
+    id("io.izzel.taboolib") version "2.0.20" apply false
+    id("org.jetbrains.kotlin.jvm") version "1.8.22" apply false
 }
 
 subprojects {
-    apply<JavaPlugin>()
+    apply(plugin = "java")
     apply(plugin = "io.izzel.taboolib")
-    apply(plugin = "maven-publish")
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     // TabooLib 配置
-    taboolib {
+    // 这里的配置是全局的，如果你的项目有多个模块，这里的配置会被所有模块共享
+    // 为了降低理解难度，使用这种更加无脑的配置方式
+    configure<TabooLibExtension> {
+        description {
+            name(rootProject.name)
+        }
         env {
-            install(
-                Bukkit,
-                BukkitHook,
-                BukkitNMSItemTag,
-                BukkitUI,
-                BukkitUtil,
-                I18n,
-                JavaScript,
-                Kether,
-                MinecraftChat,
-                MinecraftEffect,
-                Metrics
-            )
-            forceDownloadInDev = false
+            install(Basic, Bukkit, BukkitUtil)
+            install(CommandHelper)
         }
-        version {
-            coroutines = null
-            taboolib = "6.2.3-ad29825"
-        }
+        version { taboolib = "6.2.0-beta33" }
     }
 
-    // 全局仓库
+    // 仓库
     repositories {
-        mavenLocal()
         mavenCentral()
-        maven("https://repo.papermc.io/repository/maven-public/")
     }
-    // 全局依赖
+    // 依赖
     dependencies {
         compileOnly(kotlin("stdlib"))
-        compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     }
 
     // 编译配置
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
@@ -69,36 +56,4 @@ subprojects {
 
 gradle.buildFinished {
     buildDir.deleteRecursively()
-}
-
-subprojects
-    .filter { it.name != "project" && it.name != "plugin" }
-    .forEach { proj ->
-        proj.publishing { applyToSub(proj) }
-    }
-
-fun PublishingExtension.applyToSub(subProject: Project) {
-    repositories {
-        maven("http://sacredcraft.cn:8081/repository/releases") {
-            isAllowInsecureProtocol = true
-            credentials {
-                username = project.findProperty("taboolibUsername").toString()
-                password = project.findProperty("taboolibPassword").toString()
-            }
-            authentication {
-                create<BasicAuthentication>("basic")
-            }
-        }
-        mavenLocal()
-    }
-    publications {
-        create<MavenPublication>("maven") {
-            artifactId = subProject.name
-            groupId = "cc.polarastrum.aiyatsbus"
-            version = project.version.toString()
-            artifact(subProject.tasks["kotlinSourcesJar"])
-            artifact(subProject.tasks["jar"])
-            println("> Apply \"$groupId:$artifactId:$version\"")
-        }
-    }
 }
