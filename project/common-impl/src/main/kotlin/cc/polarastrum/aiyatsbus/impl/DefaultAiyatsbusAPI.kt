@@ -18,15 +18,8 @@ package cc.polarastrum.aiyatsbus.impl
 
 import cc.polarastrum.aiyatsbus.core.*
 import cc.polarastrum.aiyatsbus.core.registration.AiyatsbusEnchantmentRegisterer
-import cc.polarastrum.aiyatsbus.core.registration.modern.ModernEnchantmentRegisterer
-import cc.polarastrum.aiyatsbus.impl.registration.legacy.DefaultLegacyEnchantmentRegisterer
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
 import taboolib.common.platform.PlatformFactory
-import taboolib.common.platform.function.registerLifeCycleTask
-import taboolib.common.util.replaceWithOrder
 import taboolib.common.util.t
-import taboolib.module.nms.MinecraftVersion.versionId
 import taboolib.module.nms.nmsProxy
 
 /**
@@ -61,26 +54,9 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
 
     companion object {
 
-        private const val PACKAGE = "cc.polarastrum.aiyatsbus.impl.registration.v{0}_nms.DefaultModernEnchantmentRegisterer"
-
         lateinit var registerer: AiyatsbusEnchantmentRegisterer
 
-        @Awake(LifeCycle.CONST)
-        fun init() {
-            registerer = when {
-                versionId >= 12104 -> modern(12104)
-                versionId >= 12102 -> modern(12103)
-                versionId >= 12100 -> modern(12100)
-                versionId >= 12005 -> error("""
-                    Aiyatsbus 不支持 Minecraft 1.20.5 或 1.20.6。
-                    Aiyatsbus doesn't support Minecraft 1.20.5 or 1.20.6.
-                """.t())
-                versionId >= 12003 -> modern(12004)
-                else -> DefaultLegacyEnchantmentRegisterer
-            }
-        }
-
-        private inline fun <reified T> proxy(bind: String, vararg parameter: Any): T {
+        inline fun <reified T> proxy(bind: String, vararg parameter: Any): T {
             val time = System.currentTimeMillis()
             val proxy = nmsProxy(T::class.java, bind, *parameter)
             val cost = System.currentTimeMillis() - time
@@ -89,10 +65,6 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
             [Aiyatsbus] Generated ${T::class.java.simpleName} in ${System.currentTimeMillis() - time}ms
         """.t())
             return proxy
-        }
-
-        private fun modern(versionId: Int): ModernEnchantmentRegisterer {
-            return proxy(PACKAGE.replaceWithOrder(versionId))
         }
     }
 }

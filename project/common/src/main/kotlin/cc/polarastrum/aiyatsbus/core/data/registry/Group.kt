@@ -30,7 +30,7 @@ import taboolib.module.configuration.Configuration
 
 /**
  * 附魔组类
- * 
+ *
  * 用于将多个附魔组织在一起，管理附魔之间的互斥关系和共存限制。
  * 支持排除特定附魔、设置最大共存数量等功能。
  *

@@ -16,9 +16,8 @@
  */
 package cc.polarastrum.aiyatsbus.core
 
-import cc.polarastrum.aiyatsbus.core.data.AlternativeData
-import cc.polarastrum.aiyatsbus.core.data.BasicData
-import cc.polarastrum.aiyatsbus.core.data.Dependencies
+import cc.polarastrum.aiyatsbus.core.data.*
+import cc.polarastrum.aiyatsbus.core.data.registry.Group
 import cc.polarastrum.aiyatsbus.core.data.registry.Rarity
 import cc.polarastrum.aiyatsbus.core.data.registry.Target
 import cc.polarastrum.aiyatsbus.core.util.roman
@@ -30,10 +29,10 @@ import java.io.File
 
 /**
  * Aiyatsbus
- * cc.polarastrum.aiyatsbus.AiyatsbusEnchantment
+ * com.mcstarrysky.aiyatsbus.core.AiyatsbusEnchantment
  *
  * @author mical
- * @since 2025/6/20 18:33
+ * @since 2024/2/17 14:04
  */
 interface AiyatsbusEnchantment {
 
@@ -86,27 +85,44 @@ interface AiyatsbusEnchantment {
     val rarity: Rarity
 
     /**
+     * 附魔的变量显示与替换
+     */
+    val variables: Variables
+
+//    /**
+//     * 附魔显示
+//     */
+//    val displayer: Displayer
+
+    /**
      * 附魔对象
      */
     val targets: List<Target>
 
+    /**
+     * 附魔限制
+     */
+    val limitations: Limitations
+
+//    /**
+//     * 附魔的触发器
+//     */
+//    val trigger: Trigger?
+
     val inaccessible: Boolean
-        get() = false
-//        get() = alternativeData.inaccessible ||
-//                rarity.inaccessible ||
-//                aiyatsbusGroups.filter { enchantment.isInGroup(it.value) }.any { it.value.inaccessible }
+        get() = alternativeData.inaccessible ||
+                rarity.inaccessible ||
+                Group.filter { enchantment.isInGroup(it.value) }.any { it.value.inaccessible }
 
     fun conflictsWith(other: Enchantment): Boolean {
-        return false
-//        return limitations.conflictsWith(other)
+        return limitations.conflictsWith(other)
     }
 
     /**
      * 支持了粘液的附魔机
      */
     fun canEnchantItem(item: ItemStack): Boolean {
-        return true
-//        return limitations.checkAvailable(CheckType.ANVIL, item).isSuccess
+        return limitations.checkAvailable(CheckType.ANVIL, item).isSuccess
     }
 
     /**

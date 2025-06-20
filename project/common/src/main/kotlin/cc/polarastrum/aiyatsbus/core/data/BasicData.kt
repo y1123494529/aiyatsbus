@@ -16,11 +16,12 @@
  */
 package cc.polarastrum.aiyatsbus.core.data
 
+import cc.polarastrum.aiyatsbus.core.util.coerceInt
 import taboolib.library.configuration.ConfigurationSection
 
 /**
  * 附魔基本数据类
- * 
+ *
  * 包含附魔的基础配置信息，这些数据是附魔系统必需的。
  * 定义了附魔的启用状态、禁用世界、标识符、名称和最大等级等基本属性。
  *
@@ -33,11 +34,11 @@ data class BasicData(
     /** 是否启用该附魔，默认为 true */
     val enable: Boolean = root.getBoolean("enable", true),
     /** 禁用该附魔的世界列表，在这些世界中附魔不会生效 */
-    val disableWorlds: List<String> = root.getStringList("disable_worlds"),
+    val disableWorlds: List<String> = root.getStringList("disable-worlds").ifEmpty { root.getStringList("disable_worlds") },
     /** 附魔的唯一标识符 */
     val id: String = root.getString("id")!!,
     /** 附魔的显示名称 */
     val name: String = root.getString("name")!!,
     /** 附魔的最大等级，默认为 1 */
-    val maxLevel: Int = root.getInt("max_level", 1)
+    val maxLevel: Int = (root["max-level"]?.coerceInt(1) ?: root.getInt("max_level", 1))
 )

@@ -1,3 +1,5 @@
+@file:Suppress("LeakingThis")
+
 /*
  *  Copyright (C) 2022-2024 PolarAstrumLab
  *
@@ -16,9 +18,7 @@
  */
 package cc.polarastrum.aiyatsbus.core
 
-import cc.polarastrum.aiyatsbus.core.data.AlternativeData
-import cc.polarastrum.aiyatsbus.core.data.BasicData
-import cc.polarastrum.aiyatsbus.core.data.Dependencies
+import cc.polarastrum.aiyatsbus.core.data.*
 import cc.polarastrum.aiyatsbus.core.data.registry.Rarity
 import cc.polarastrum.aiyatsbus.core.data.registry.Target
 import org.bukkit.NamespacedKey
@@ -53,12 +53,12 @@ abstract class AiyatsbusEnchantmentBase(
         get() = aiyatsbusRarity(config["rarity"].toString())
             ?: aiyatsbusRarity(AiyatsbusSettings.defaultRarity) ?: error("Enchantment $id has an unknown rarity")
 
-//    override val variables: Variables = Variables(config.getConfigurationSection("variables"))
+    override val variables: Variables = Variables(config.getConfigurationSection("variables"))
 
     override val targets: List<Target>
         get() = config.getStringList("targets").mapNotNull(::aiyatsbusTarget)
 //
 //    override val displayer: Displayer = Displayer(config.getConfigurationSection("display")!!, this)
-//
-//    override val limitations: Limitations = Limitations(this, config.getStringList("limitations"))
+
+    override val limitations: Limitations = Limitations(this, config.getStringList("limitations"))
 }

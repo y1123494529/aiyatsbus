@@ -30,7 +30,7 @@ import kotlin.jvm.optionals.getOrNull
 
 /**
  * 附魔目标类
- * 
+ *
  * 定义附魔可以应用的目标物品类型和装备槽位。
  * 支持指定物品材质、装备槽位、最大附魔数量等配置。
  *
@@ -49,7 +49,8 @@ data class Target @JvmOverloads constructor(
     /** 激活槽位列表，指定附魔在哪些装备槽位生效 */
     val activeSlots: List<EquipmentSlot> = root.getStringList("active_slots").map { EquipmentSlot.valueOf(it) },
     /** 支持的物品类型列表，指定附魔可以应用的物品材质 */
-    val types: List<Material> = root.getStringList("types").mapNotNull { XMaterial.matchXMaterial(it).getOrNull()?.parseMaterial() },
+    val types: List<Material> = root.getStringList("types")
+        .mapNotNull { XMaterial.matchXMaterial(it).getOrNull()?.parseMaterial() },
     /** 头颅材质值，用于自定义头颅显示 */
     val skull: String = root.getString("skull", "")!!,
 ) : RegistryItem(root), Dependency {

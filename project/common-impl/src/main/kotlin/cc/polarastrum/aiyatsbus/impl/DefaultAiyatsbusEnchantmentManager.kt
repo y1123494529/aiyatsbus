@@ -23,7 +23,9 @@ import cc.polarastrum.aiyatsbus.core.util.FileWatcher.unwatch
 import cc.polarastrum.aiyatsbus.core.util.FileWatcher.watch
 import cc.polarastrum.aiyatsbus.core.util.YamlUpdater
 import cc.polarastrum.aiyatsbus.core.util.deepRead
+import cc.polarastrum.aiyatsbus.impl.DefaultAiyatsbusAPI.Companion.proxy
 import cc.polarastrum.aiyatsbus.impl.enchant.InternalAiyatsbusEnchantment
+import cc.polarastrum.aiyatsbus.impl.registration.legacy.DefaultLegacyEnchantmentRegisterer
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
@@ -32,7 +34,10 @@ import taboolib.common.io.runningResourcesInJar
 import taboolib.common.platform.Awake
 import taboolib.common.platform.PlatformFactory
 import taboolib.common.platform.function.*
+import taboolib.common.util.replaceWithOrder
+import taboolib.common.util.t
 import taboolib.module.configuration.Configuration
+import taboolib.module.nms.MinecraftVersion.versionId
 import taboolib.platform.util.onlinePlayers
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
@@ -216,6 +221,8 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
      */
     companion object {
 
+        private const val PACKAGE = "cc.polarastrum.aiyatsbus.impl.registration.v{0}_nms.DefaultModernEnchantmentRegisterer"
+
         /**
          * 初始化附魔管理器
          * 
@@ -225,7 +232,20 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
         @Awake(LifeCycle.CONST)
         fun init() {
             PlatformFactory.registerAPI<AiyatsbusEnchantmentManager>(DefaultAiyatsbusEnchantmentManager())
-            val registerer = DefaultAiyatsbusAPI.registerer
+
+            val registerer = when {
+                versionId >= 12104 -> modern(12104)
+                versionId >= 12102 -> modern(12103)
+                versionId >= 12100 -> modern(12100)
+                versionId >= 12005 -> error("""
+                    Aiyatsbus 不支持 Minecraft 1.20.5 或 1.20.6。
+                    Aiyatsbus doesn't support Minecraft 1.20.5 or 1.20.6.
+                """.t())
+                versionId >= 12003 -> modern(12004)
+                else -> DefaultLegacyEnchantmentRegisterer
+            }
+            DefaultAiyatsbusAPI.registerer = registerer
+
             if (registerer is ModernEnchantmentRegisterer) {
                 registerer.replaceRegistry()
                 registerLifeCycleTask(LifeCycle.ACTIVE) {
@@ -238,6 +258,10 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
                     Aiyatsbus.api().getEnchantmentManager().loadEnchantments()
                 }
             }
+        }
+
+        private fun modern(versionId: Int): ModernEnchantmentRegisterer {
+            return proxy(PACKAGE.replaceWithOrder(versionId))
         }
     }
 }

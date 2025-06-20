@@ -31,7 +31,7 @@ import kotlin.system.measureTimeMillis
 
 /**
  * 注册项基类
- * 
+ *
  * 所有可注册项目的基类，包含配置节点和唯一标识符。
  * 用于统一管理各种配置项的加载和存储。
  *
@@ -47,7 +47,7 @@ abstract class RegistryItem(
 
 /**
  * 注册器基类
- * 
+ *
  * 提供统一的注册项管理功能，支持配置文件的自动加载和重载。
  * 实现了 Map 接口，可以直接通过键值对的方式访问注册项。
  *
@@ -65,7 +65,7 @@ abstract class Registry<T : RegistryItem>(
     private val itemFactory: Function<ConfigurationSection, T>,
     /** 已注册项的存储容器，使用并发哈希映射保证线程安全 */
     private val registered: ConcurrentHashMap<String, T> = ConcurrentHashMap()
-): Map<String, T> by registered {
+) : Map<String, T> by registered {
 
     /** 注册器对应的配置文件 */
     abstract val config: Configuration
@@ -87,7 +87,7 @@ abstract class Registry<T : RegistryItem>(
 
     /**
      * 初始化注册器
-     * 
+     *
      * 如果已经加载过，则重新加载配置文件；
      * 否则执行首次加载并标记为已加载状态。
      */
@@ -102,7 +102,7 @@ abstract class Registry<T : RegistryItem>(
 
     /**
      * 加载注册项
-     * 
+     *
      * 清空现有注册项，从配置文件中重新加载所有项目。
      * 对于实现了 Dependency 接口的注册项，会检查依赖条件。
      * 记录加载耗时并输出日志信息。
