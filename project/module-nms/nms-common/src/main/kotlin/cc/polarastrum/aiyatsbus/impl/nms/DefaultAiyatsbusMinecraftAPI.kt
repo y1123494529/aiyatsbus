@@ -39,6 +39,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import taboolib.common.platform.function.info
 import taboolib.library.reflex.Reflex.Companion.getProperty
 import taboolib.library.reflex.Reflex.Companion.invokeConstructor
 import taboolib.library.reflex.Reflex.Companion.invokeMethod
@@ -152,6 +153,11 @@ class DefaultAiyatsbusMinecraftAPI : AiyatsbusMinecraftAPI {
     }
 
     override fun componentToJson(iChatBaseComponent: Any): String {
+        if (iChatBaseComponent is io.papermc.paper.adventure.AdventureComponent) {
+            return GsonComponentSerializer.gson().serialize(
+                iChatBaseComponent.`adventure$component`()
+            )
+        }
         return CraftChatMessage16.toJSON(iChatBaseComponent as NMS16IChatBaseComponent)
     }
 
