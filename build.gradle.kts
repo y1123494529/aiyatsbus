@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    id("io.izzel.taboolib") version "2.0.20" apply false
+    id("io.izzel.taboolib") version "2.0.23" apply false
     id("org.jetbrains.kotlin.jvm") version "1.8.22" apply false
 }
 
@@ -22,26 +22,41 @@ subprojects {
             name(rootProject.name)
         }
         env {
-            install(Basic, Bukkit, BukkitUtil)
-            install(CommandHelper)
+            install(
+                Bukkit,
+                BukkitHook,
+                BukkitNMSItemTag,
+                BukkitUI,
+                BukkitUtil,
+                I18n,
+                JavaScript,
+                Kether,
+                MinecraftChat,
+                MinecraftEffect,
+                Metrics
+            )
         }
-        version { taboolib = "6.2.0-beta33" }
+        version {
+            taboolib = "6.2.3-ad29825"
+        }
     }
 
     // 仓库
     repositories {
         mavenCentral()
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
     // 依赖
     dependencies {
         compileOnly(kotlin("stdlib"))
+        compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
     }
 
     // 编译配置
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"

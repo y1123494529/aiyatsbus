@@ -1,0 +1,54 @@
+package cc.polarastrum.aiyatsbus.core.data.registry
+
+import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantment
+import cc.polarastrum.aiyatsbus.core.data.Dependencies
+import cc.polarastrum.aiyatsbus.core.data.Dependency
+import cc.polarastrum.aiyatsbus.core.data.Registry
+import cc.polarastrum.aiyatsbus.core.data.RegistryItem
+import taboolib.library.configuration.ConfigurationSection
+import taboolib.module.configuration.Config
+import taboolib.module.configuration.Configuration
+
+/**
+ * 附魔组类
+ * 
+ * 用于将多个附魔组织在一起，管理附魔之间的互斥关系和共存限制。
+ * 支持排除特定附魔、设置最大共存数量等功能。
+ *
+ * @author mical
+ * @since 2025/6/20 20:16
+ */
+data class Group @JvmOverloads constructor(
+    /** 配置根节点 */
+    private val root: ConfigurationSection,
+    /** 依赖项配置，定义该附魔组的前置条件 */
+    override val dependencies: Dependencies = Dependencies(root.getConfigurationSection("dependencies")),
+    /** 附魔组名称，默认为配置节点名称 */
+    val name: String = root.name,
+    /** 排除的附魔列表，这些附魔不会出现在该组中 */
+    val exclude: List<AiyatsbusEnchantment> = emptyList(),
+    /** 包含的附魔列表，该组管理的所有附魔 */
+    val enchantments: List<AiyatsbusEnchantment> = emptyList(),
+    /** 头颅材质值，用于自定义头颅显示 */
+    val skull: String = root.getString(
+        "skull",
+        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzRiODlhZDA2ZDMxOGYwYWUxZWVhZjY2MGZlYTc4YzM0ZWI1NWQwNWYwMWUxY2Y5OTlmMzMxZmIzMmQzODk0MiJ9fX0="
+    )!!,
+    /** 最大共存数量，限制该组中附魔可以同时存在的最大数量，默认为 1 */
+    val maxCoexist: Int = root.getInt("max_coexist", 1),
+    /** 是否不可访问，为 true 时玩家无法获得该附魔组的附魔 */
+    val inaccessible: Boolean = root.getBoolean("inaccessible", false),
+) : RegistryItem(root), Dependency {
+
+    /**
+     * 附魔组注册器伴生对象
+     * 负责从配置文件中加载和管理附魔组数据
+     */
+    companion object : Registry<Group>("group", { section -> Group(section) }) {
+
+        /** 附魔组配置文件，自动重载配置变更 */
+        @Config("enchants/group.yml", autoReload = true)
+        override lateinit var config: Configuration
+            private set
+    }
+}
