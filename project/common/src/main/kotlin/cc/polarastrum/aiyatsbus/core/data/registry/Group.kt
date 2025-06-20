@@ -1,6 +1,25 @@
+/*
+ *  Copyright (C) 2022-2024 PolarAstrumLab
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package cc.polarastrum.aiyatsbus.core.data.registry
 
 import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantment
+import cc.polarastrum.aiyatsbus.core.aiyatsbusEt
+import cc.polarastrum.aiyatsbus.core.aiyatsbusEts
+import cc.polarastrum.aiyatsbus.core.aiyatsbusRarity
 import cc.polarastrum.aiyatsbus.core.data.Dependencies
 import cc.polarastrum.aiyatsbus.core.data.Dependency
 import cc.polarastrum.aiyatsbus.core.data.Registry
@@ -26,9 +45,13 @@ data class Group @JvmOverloads constructor(
     /** 附魔组名称，默认为配置节点名称 */
     val name: String = root.name,
     /** 排除的附魔列表，这些附魔不会出现在该组中 */
-    val exclude: List<AiyatsbusEnchantment> = emptyList(),
+    val exclude: List<AiyatsbusEnchantment> = root.getStringList("exclude").mapNotNull(::aiyatsbusEt),
     /** 包含的附魔列表，该组管理的所有附魔 */
-    val enchantments: List<AiyatsbusEnchantment> = emptyList(),
+    val enchantments: List<AiyatsbusEnchantment> = root.getStringList("enchants").mapNotNull(::aiyatsbusEt)
+        .toMutableList().also {
+            it += root.getStringList("rarities")
+                .map { aiyatsbusRarity(it)?.let { r -> aiyatsbusEts(r) } ?: listOf() }.flatten()
+        }.filter { it !in exclude },
     /** 头颅材质值，用于自定义头颅显示 */
     val skull: String = root.getString(
         "skull",

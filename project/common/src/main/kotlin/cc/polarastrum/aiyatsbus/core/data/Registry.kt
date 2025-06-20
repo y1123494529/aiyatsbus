@@ -1,14 +1,30 @@
+/*
+ *  Copyright (C) 2022-2024 PolarAstrumLab
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 @file:Suppress("LeakingThis")
 
 package cc.polarastrum.aiyatsbus.core.data
 
 import cc.polarastrum.aiyatsbus.core.StandardPriorities
+import cc.polarastrum.aiyatsbus.core.sendLang
 import taboolib.common.LifeCycle
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.registerLifeCycleTask
 import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.Configuration
-import taboolib.module.lang.sendLang
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Function
 import kotlin.system.measureTimeMillis
@@ -64,8 +80,7 @@ abstract class Registry<T : RegistryItem>(
             // 监听配置文件重载事件
             config.onReload {
                 loadItem()
-                println(config.file!!.name + "自动重载了")
-                // console().sendLang("plugin-reload-config", config.file!!.name)
+                console().sendLang("configuration-reload", config.file!!.name)
             }
         }
     }
@@ -107,7 +122,6 @@ abstract class Registry<T : RegistryItem>(
                 registered += item.id to item
             }
         }
-        println("加载了 " + registered.size + " 个 " + registryId)
-        // console().sendLang("loading-$registryId", registered.size, time)
+        console().sendLang("loading-$registryId", registered.size, time)
     }
 }

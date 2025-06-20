@@ -1,9 +1,31 @@
+/*
+ *  Copyright (C) 2022-2024 PolarAstrumLab
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package cc.polarastrum.aiyatsbus.core
 
+import cc.polarastrum.aiyatsbus.core.data.AlternativeData
+import cc.polarastrum.aiyatsbus.core.data.BasicData
+import cc.polarastrum.aiyatsbus.core.data.Dependencies
 import cc.polarastrum.aiyatsbus.core.data.registry.Rarity
 import cc.polarastrum.aiyatsbus.core.data.registry.Target
+import cc.polarastrum.aiyatsbus.core.util.roman
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.ItemStack
+import taboolib.module.configuration.Configuration
 import java.io.File
 
 /**
@@ -31,6 +53,26 @@ interface AiyatsbusEnchantment {
     val file: File
 
     /**
+     * 附魔的配置
+     */
+    val config: Configuration
+
+    /**
+     * 附魔的基本数据
+     */
+    val basicData: BasicData
+
+    /**
+     * 附魔的额外数据
+     */
+    val alternativeData: AlternativeData
+
+    /**
+     * 附魔的依赖信息, 包括必须为 MC 哪个版本才能使用, 必须安装哪些数据包, 必须安装哪些插件
+     */
+    val dependencies: Dependencies
+
+    /**
      * Bukkit 附魔实例, 在注册后赋值, 一般是 CraftEnchantment
      *
      * 在 1.20.2 及以下版本中, 这个是 LegacyCraftEnchantment
@@ -47,4 +89,33 @@ interface AiyatsbusEnchantment {
      * 附魔对象
      */
     val targets: List<Target>
+
+    val inaccessible: Boolean
+        get() = false
+//        get() = alternativeData.inaccessible ||
+//                rarity.inaccessible ||
+//                aiyatsbusGroups.filter { enchantment.isInGroup(it.value) }.any { it.value.inaccessible }
+
+    fun conflictsWith(other: Enchantment): Boolean {
+        return false
+//        return limitations.conflictsWith(other)
+    }
+
+    /**
+     * 支持了粘液的附魔机
+     */
+    fun canEnchantItem(item: ItemStack): Boolean {
+        return true
+//        return limitations.checkAvailable(CheckType.ANVIL, item).isSuccess
+    }
+
+    /**
+     * 显示名称
+     */
+    fun displayName(level: Int? = null, roman: Boolean = true): String {
+        return rarity.displayName(
+            basicData.name + if (roman) (level?.roman(basicData.maxLevel == 1, true)
+                ?: "") else if (basicData.maxLevel == 1) "" else level
+        )
+    }
 }
