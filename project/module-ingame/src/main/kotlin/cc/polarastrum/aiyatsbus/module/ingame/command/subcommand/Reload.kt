@@ -18,7 +18,7 @@ package cc.polarastrum.aiyatsbus.module.ingame.command.subcommand
 
 import cc.polarastrum.aiyatsbus.core.*
 import cc.polarastrum.aiyatsbus.core.compat.EnchantRegistrationHooks
-import cc.polarastrum.aiyatsbus.core.data.registry.RarityLoader
+import cc.polarastrum.aiyatsbus.core.event.AiyatsbusReloadEvent
 import cc.polarastrum.aiyatsbus.core.registration.modern.ModernEnchantmentRegisterer
 import cc.polarastrum.aiyatsbus.core.util.inject.Reloadables
 import cc.polarastrum.aiyatsbus.module.ingame.command.AiyatsbusCommand
@@ -56,5 +56,7 @@ val reloadSubCommand = subCommand {
         sender.sendLang("plugin-reload", System.currentTimeMillis() - time)
         EnchantRegistrationHooks.unregisterHooks()
         EnchantRegistrationHooks.registerHooks()
+        val event = AiyatsbusReloadEvent()
+        event.call()
     }
 }
