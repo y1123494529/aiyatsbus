@@ -29,6 +29,7 @@ import cc.polarastrum.aiyatsbus.impl.registration.legacy.DefaultLegacyEnchantmen
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import taboolib.common.LifeCycle
+import taboolib.common.TabooLib
 import taboolib.common.io.newFolder
 import taboolib.common.io.runningResourcesInJar
 import taboolib.common.platform.Awake
@@ -41,6 +42,7 @@ import taboolib.module.nms.MinecraftVersion.versionId
 import taboolib.platform.util.onlinePlayers
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArraySet
 
 /**
  * 默认 Aiyatsbus 附魔管理器实现
@@ -61,6 +63,9 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
     /** 按名称存储的附魔映射 */
     private val byNameMap = ConcurrentHashMap<String, AiyatsbusEnchantment>()
 
+    /** 等待被注册的附魔 */
+    private val enchantmentsToRegister = CopyOnWriteArraySet<AiyatsbusEnchantmentBase>()
+
     override fun getEnchants(): Map<NamespacedKey, AiyatsbusEnchantment> {
         return byKeyMap
     }
@@ -78,15 +83,24 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
     }
 
     override fun register(enchantment: AiyatsbusEnchantmentBase) {
-        val ench = Aiyatsbus.api().getEnchantmentRegisterer().register(enchantment) as AiyatsbusEnchantment
-        byKeyMap[enchantment.enchantmentKey] = ench
-        byKeyStringMap[enchantment.basicData.id] = ench
-        byNameMap[enchantment.basicData.name] = ench
+        // 如果不是内置附魔, 就添加进待注册附魔
+        // 不从列表中删除, 是为了防止重载丢失第三方附魔的情况出现
+        if (enchantment !is InternalAiyatsbusEnchantment) {
+            enchantmentsToRegister += enchantment
+        }
+        // 在 LOAD 生命周期后调用本函数, 就注册该附魔
+        if (TabooLib.getCurrentLifeCycle() != LifeCycle.LOAD) {
+            val ench = Aiyatsbus.api().getEnchantmentRegisterer().register(enchantment) as AiyatsbusEnchantment
+            byKeyMap[enchantment.enchantmentKey] = ench
+            byKeyStringMap[enchantment.basicData.id] = ench
+            byNameMap[enchantment.basicData.name] = ench
+        }
 //        EnchantRegistrationHooks.registerHooks()
     }
 
     override fun unregister(enchantment: AiyatsbusEnchantment) {
 //        enchantment.trigger?.onDisable()
+        enchantmentsToRegister.remove(enchantment)
         Aiyatsbus.api().getEnchantmentRegisterer().unregister(enchantment)
         byKeyMap -= enchantment.enchantmentKey
         byKeyStringMap -= enchantment.basicData.id
@@ -112,6 +126,9 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
                 .flatten()
                 .forEach { file -> loadFromFile(file) }
         }
+
+        // 如果是重载, 就再注册一次防止附属附魔丢失
+        enchantmentsToRegister.forEach { register(it) }
 
         console().sendLang("loading-enchantments", byKeyMap.size, System.currentTimeMillis() - startTime)
     }

@@ -68,10 +68,10 @@ class Variables(
     private val variables: MutableMap<String, VariableType> = HashMap()
 
     /** 与等级有关的变量，Pair 里的 String 是单位，Map 里的 Int 是等级，String 是公式 */
-    val leveled: MutableMap<String, Pair<String, Map<Int, String>>> = HashMap()
+    val leveled: MutableMap<String, Pair1<String, Map<Int, String>>> = HashMap()
 
     /** 与物品强相关的数据，变量名对初始值 */
-    private val modifiable: MutableMap<String, Pair<String, String>> = HashMap()
+    private val modifiable: MutableMap<String, Pair1<String, String>> = HashMap()
 
     /** 常量，相当于附魔配置，变量名对值 */
     private val ordinary: MutableMap<String, Any?> = HashMap()
@@ -81,12 +81,12 @@ class Variables(
         root?.getConfigurationSection("leveled").asMap().forEach { (variable, section) ->
             // 如果分级配置了不同的值
             if (section is ConfigurationSection) {
-                leveled[variable] = (section["unit"]?.toString().orEmpty()) to section.asMap()
+                leveled[variable] = (section["unit"]?.toString().orEmpty()) to1 section.asMap()
                     .map { it.key.cint to it.value.toString() }.toMap()
             } else {
                 val (unit, formula) = section.toString().split(":", limit = 2)
                 // 只存 1 级，任何等级都能获取到
-                leveled[variable] = unit to mapOf(1 to formula)
+                leveled[variable] = unit to1 mapOf(1 to formula)
             }
             // 存储该变量的类型
             variables[variable] = VariableType.LEVELED
@@ -94,7 +94,7 @@ class Variables(
         // 解析物品相关变量
         root?.getConfigurationSection("modifiable").asMap().forEach { (variable, expression) ->
             val parts = expression.toString().split('=')
-            modifiable[variable] = parts[0] to parts[1]
+            modifiable[variable] = parts[0] to1 parts[1]
             variables[variable] = VariableType.MODIFIABLE
         }
         // 解析常量变量

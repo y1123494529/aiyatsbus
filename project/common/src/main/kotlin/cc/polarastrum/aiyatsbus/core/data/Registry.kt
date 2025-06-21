@@ -75,7 +75,7 @@ abstract class Registry<T : RegistryItem>(
 
     init {
         // 注册生命周期任务，在插件启用时自动初始化
-        registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.getDataProperty(registryId)) {
+        registerLifeCycleTask(LifeCycle.LOAD, StandardPriorities.getDataProperty(registryId)) {
             initialize()
             // 监听配置文件重载事件
             config.onReload {

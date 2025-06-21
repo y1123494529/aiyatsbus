@@ -47,7 +47,7 @@ data class Target @JvmOverloads constructor(
     /** 最大附魔数量，限制该目标物品可以拥有的附魔数量 */
     val capability: Int = root.getInt("max"),
     /** 激活槽位列表，指定附魔在哪些装备槽位生效 */
-    val activeSlots: List<EquipmentSlot> = root.getStringList("active_slots").map { EquipmentSlot.valueOf(it) },
+    val activeSlots: List<EquipmentSlot> = (root.getStringList("active-slots").ifEmpty { root.getStringList("active_slots") }).map { EquipmentSlot.valueOf(it) },
     /** 支持的物品类型列表，指定附魔可以应用的物品材质 */
     val types: List<Material> = root.getStringList("types")
         .mapNotNull { XMaterial.matchXMaterial(it).getOrNull()?.parseMaterial() },
