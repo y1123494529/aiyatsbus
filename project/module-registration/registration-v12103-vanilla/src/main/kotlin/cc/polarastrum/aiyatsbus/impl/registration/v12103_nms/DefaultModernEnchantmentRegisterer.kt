@@ -108,9 +108,6 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
         frozenField.set(itemRegistry, false)
         unregisteredIntrusiveHoldersField.set(itemRegistry, IdentityHashMap<Item, Holder.c<Item>>())
 
-        // Clear the enchantment cache
-        cache.set(bukkitRegistry, mutableMapOf<NamespacedKey, Enchantment>())
-
         // Unfreeze NMS Enchantment registry
         frozenField.set(enchantmentRegistry, false)
         unregisteredIntrusiveHoldersField.set(
