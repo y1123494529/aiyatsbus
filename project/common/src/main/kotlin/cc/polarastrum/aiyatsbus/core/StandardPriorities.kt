@@ -39,16 +39,18 @@ object StandardPriorities {
     const val TICKERS = 3
     /** 附魔效果优先级 */
     const val ENCHANTMENT = 4
+    /** 冻结注册表优先级 */
+    const val FREEZE_REGISTRY = 5
     /** 附魔组优先级 */
-    const val GROUP = 5
+    const val GROUP = 6
     /** 限制条件优先级 */
-    const val LIMITATIONS = 6
+    const val LIMITATIONS = 7
     /** 玩家数据优先级 */
-    const val PLAYER_DATA = 7
+    const val PLAYER_DATA = 8
     /** 菜单系统优先级 */
-    const val MENU = 8
+    const val MENU = 9
     /** 反非法物品检测优先级，最低优先级 */
-    const val ANTI_ILLEGAL_ITEM = 9
+    const val ANTI_ILLEGAL_ITEM = 10
 
     /**
      * 获取数据属性优先级
