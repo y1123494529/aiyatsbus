@@ -28,3 +28,5 @@ include("project:module-script:script-kether")
 
 include("project:module-nms")
 include("project:module-nms:nms-v12005")
+
+include("project:module-compat")

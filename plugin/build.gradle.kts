@@ -25,12 +25,12 @@ taboolib {
         bukkitApi("1.16")
     }
 
-//    relocate("ink.ptms.um", "cc.polarastrum.aiyatsbus.module.compat.library.um")
+    relocate("ink.ptms.um", "cc.polarastrum.aiyatsbus.module.compat.library.um")
     relocate("redempt", "cc.polarastrum.aiyatsbus.library")
 }
 
 dependencies {
-//    taboo("ink.ptms:um:1.0.9")
+    taboo("ink.ptms:um:1.0.9")
     taboo("com.github.Redempt:Crunch:1.0.7")
 }
 
