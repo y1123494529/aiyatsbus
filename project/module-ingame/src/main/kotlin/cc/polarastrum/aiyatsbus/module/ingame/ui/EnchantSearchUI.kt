@@ -40,6 +40,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.function.console
 import taboolib.module.chat.Source
 import taboolib.platform.util.modifyMeta
 import kotlin.collections.set
@@ -60,6 +61,7 @@ object EnchantSearchUI {
     fun init() {
         source.onReload {
             config = MenuConfiguration(source)
+            console().sendLang("configuration-reload", source.file!!.name)
         }
     }
 

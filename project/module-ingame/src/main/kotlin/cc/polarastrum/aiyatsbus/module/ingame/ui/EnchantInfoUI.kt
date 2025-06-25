@@ -46,6 +46,7 @@ import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.UIType
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.record
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.function.console
 import taboolib.module.chat.Source
 import kotlin.collections.set
 
@@ -65,6 +66,7 @@ object EnchantInfoUI {
     fun init() {
         source.onReload {
             config = MenuConfiguration(source)
+            console().sendLang("configuration-reload", source.file!!.name)
         }
     }
 

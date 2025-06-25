@@ -47,6 +47,7 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.PlatformFactory
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.ProxyListener
+import taboolib.common.platform.function.console
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.registerLifeCycleTask
 import taboolib.common.platform.function.unregisterListener
@@ -286,14 +287,12 @@ class DefaultAiyatsbusEventExecutor : AiyatsbusEventExecutor {
         @Awake(LifeCycle.CONST)
         fun init() {
             PlatformFactory.registerAPI<AiyatsbusEventExecutor>(DefaultAiyatsbusEventExecutor())
-            registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.EVENT_EXECUTORS) {
-                initialize()
+            reloadable {
+                registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.EVENT_EXECUTORS) {
+                    Aiyatsbus.api().getEventExecutor().destroyListeners()
+                    Aiyatsbus.api().getEventExecutor().registerListeners()
+                }
             }
-        }
-
-        fun initialize() {
-            Aiyatsbus.api().getEventExecutor().destroyListeners()
-            Aiyatsbus.api().getEventExecutor().registerListeners()
         }
 
         @Awake(LifeCycle.ENABLE)
@@ -301,6 +300,7 @@ class DefaultAiyatsbusEventExecutor : AiyatsbusEventExecutor {
             conf.onReload {
                 Aiyatsbus.api().getEventExecutor().destroyListeners()
                 Aiyatsbus.api().getEventExecutor().registerListeners()
+                console().sendLang("configuration-reload", conf.file!!.name)
             }
         }
 

@@ -21,8 +21,11 @@ import cc.polarastrum.aiyatsbus.core.data.CheckType
 import cc.polarastrum.aiyatsbus.core.data.registry.Group
 import org.bukkit.event.entity.VillagerAcquireTradeEvent
 import org.bukkit.inventory.MerchantRecipe
+import taboolib.common.LifeCycle
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.console
+import taboolib.common.platform.function.registerLifeCycleTask
 import taboolib.common.util.random
 import taboolib.module.configuration.Config
 import taboolib.module.configuration.ConfigNode
@@ -54,6 +57,14 @@ object VillagerSupport {
 
     @ConfigNode("max_level_limit")
     var maxLevelLimit = -1
+
+    init {
+        registerLifeCycleTask(LifeCycle.ENABLE) {
+            conf.onReload {
+                console().sendLang("configuration-reload", conf.file!!.name)
+            }
+        }
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun acquireTrade(e: VillagerAcquireTradeEvent) {

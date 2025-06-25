@@ -20,6 +20,7 @@ import cc.polarastrum.aiyatsbus.core.Aiyatsbus
 import cc.polarastrum.aiyatsbus.core.FilterStatement
 import cc.polarastrum.aiyatsbus.core.FilterType
 import cc.polarastrum.aiyatsbus.core.data.registry.Target
+import cc.polarastrum.aiyatsbus.core.sendLang
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.MenuComponent
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.config.MenuConfiguration
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.feature.util.MenuFunctionBuilder
@@ -39,6 +40,7 @@ import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.UIType
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.record
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.function.console
 import kotlin.collections.set
 
 @MenuComponent("FilterTarget")
@@ -57,6 +59,7 @@ object FilterTargetUI {
     fun init() {
         source.onReload {
             config = MenuConfiguration(source)
+            console().sendLang("configuration-reload", source.file!!.name)
         }
     }
 

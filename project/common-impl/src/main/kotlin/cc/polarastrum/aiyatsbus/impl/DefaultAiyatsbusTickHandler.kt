@@ -21,6 +21,7 @@ import com.google.common.collect.Table
 import cc.polarastrum.aiyatsbus.core.*
 import cc.polarastrum.aiyatsbus.core.data.CheckType
 import cc.polarastrum.aiyatsbus.core.util.isNull
+import cc.polarastrum.aiyatsbus.core.util.reloadable
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -143,14 +144,12 @@ class DefaultAiyatsbusTickHandler : AiyatsbusTickHandler {
         @Awake(LifeCycle.CONST)
         fun init() {
             PlatformFactory.registerAPI<AiyatsbusTickHandler>(DefaultAiyatsbusTickHandler())
-            registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.TICKERS) {
-                initialize()
+            reloadable {
+                registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.TICKERS) {
+                    Aiyatsbus.api().getTickHandler().reset()
+                    Aiyatsbus.api().getTickHandler().start()
+                }
             }
-        }
-
-        fun initialize() {
-            Aiyatsbus.api().getTickHandler().reset()
-            Aiyatsbus.api().getTickHandler().start()
         }
 
         @Awake(LifeCycle.DISABLE)

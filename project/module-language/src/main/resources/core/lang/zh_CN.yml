@@ -149,7 +149,7 @@ command-argument-wrong:
 command-argument-unknown:
   - '{prefix} &7指令 &f{name} &7不存在'
   - '{prefix} &7你可能想要:'
-  - '{prefix} &f{similar}'
+  - '{prefix} &f/aiyatsbus {similar} {usage}&8- &7{description}'
 command-incorrect-sender: '{prefix} &7指令 &f{name} &7只能由 &f玩家 &7执行'
 command-subCommands-book-description: '给玩家一本指定的附魔书'
 command-subCommands-book-usage: '&7\[&8附魔&7\] &7<&8等级&7> &7<&8玩家&7>'

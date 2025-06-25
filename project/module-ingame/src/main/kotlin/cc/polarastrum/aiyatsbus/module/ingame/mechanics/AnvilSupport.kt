@@ -26,8 +26,11 @@ import org.bukkit.event.inventory.PrepareAnvilEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
+import taboolib.common.LifeCycle
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.console
+import taboolib.common.platform.function.registerLifeCycleTask
 import taboolib.common5.cdouble
 import taboolib.common5.cint
 import taboolib.module.configuration.Config
@@ -101,6 +104,14 @@ object AnvilSupport {
         mapOf(*toTypedArray().map { it.split(":")[0] to it.split(":")[1] }.toTypedArray())
     }
 
+    init {
+        registerLifeCycleTask(LifeCycle.ENABLE) {
+            conf.onReload {
+                console().sendLang("configuration-reload", conf.file!!.name)
+            }
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     fun onAnvil(e: PrepareAnvilEvent) {
         e.inventory.maximumRepairCost = maxCost
@@ -115,8 +126,7 @@ object AnvilSupport {
             return
         }
 
-        // TODO: Repair Cost
-//        if (useReworkPenalty && !result.onlyEditName) result.item?.repairCost = reworkPenalty.calcToInt("repairCost" to (result.item?.repairCost ?: 0))
+        if (useReworkPenalty && !result.onlyEditName) result.item?.repairCost = reworkPenalty.calcToInt("repairCost" to (result.item?.repairCost ?: 0))
         e.inventory.repairCost = result.experience
         e.inventory.repairCostAmount = result.costItemAmount
         e.result = result.item

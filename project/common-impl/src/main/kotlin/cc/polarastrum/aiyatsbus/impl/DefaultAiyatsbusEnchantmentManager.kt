@@ -23,6 +23,7 @@ import cc.polarastrum.aiyatsbus.core.util.FileWatcher.unwatch
 import cc.polarastrum.aiyatsbus.core.util.FileWatcher.watch
 import cc.polarastrum.aiyatsbus.core.util.YamlUpdater
 import cc.polarastrum.aiyatsbus.core.util.deepRead
+import cc.polarastrum.aiyatsbus.core.util.reloadable
 import cc.polarastrum.aiyatsbus.impl.DefaultAiyatsbusAPI.Companion.proxy
 import cc.polarastrum.aiyatsbus.impl.enchant.InternalAiyatsbusEnchantment
 import cc.polarastrum.aiyatsbus.impl.registration.legacy.DefaultLegacyEnchantmentRegisterer
@@ -273,6 +274,8 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
                 registerLifeCycleTask(LifeCycle.DISABLE) {
                     Aiyatsbus.api().getEnchantmentManager().clearEnchantments()
                 }
+            }
+            reloadable {
                 registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.ENCHANTMENT) {
                     Aiyatsbus.api().getEnchantmentManager().loadEnchantments()
                 }

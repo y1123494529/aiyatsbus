@@ -3,6 +3,7 @@ package cc.polarastrum.aiyatsbus.core.data
 import cc.polarastrum.aiyatsbus.core.*
 import cc.polarastrum.aiyatsbus.core.data.LimitType.*
 import cc.polarastrum.aiyatsbus.core.util.coerceBoolean
+import cc.polarastrum.aiyatsbus.core.util.reloadable
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -321,24 +322,26 @@ data class Limitations(
          */
         @Awake(LifeCycle.LOAD)
         fun onEnable() {
-            registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.LIMITATIONS) {
-                // 处理附魔组冲突
-                conflictGroups.forEach { (enchant, group) ->
-                    aiyatsbusEt(enchant) ?: return@forEach
-                    aiyatsbusGroup(group)?.enchantments?.forEach { 
-                        it.limitations.limitations.add(CONFLICT_ENCHANT to enchant)
+            reloadable {
+                registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.LIMITATIONS) {
+                    // 处理附魔组冲突
+                    conflictGroups.forEach { (enchant, group) ->
+                        aiyatsbusEt(enchant) ?: return@forEach
+                        aiyatsbusGroup(group)?.enchantments?.forEach {
+                            it.limitations.limitations.add(CONFLICT_ENCHANT to enchant)
+                        }
                     }
-                }
-                conflictGroups.clear()
+                    conflictGroups.clear()
 
-                // 处理附魔冲突
-                conflicts.forEach { (a, b) ->
-                    val etA = aiyatsbusEt(a) ?: return@forEach
-                    val etB = aiyatsbusEt(b) ?: return@forEach
-                    etA.limitations.limitations.add(CONFLICT_ENCHANT to b)
-                    etB.limitations.limitations.add(CONFLICT_ENCHANT to a)
+                    // 处理附魔冲突
+                    conflicts.forEach { (a, b) ->
+                        val etA = aiyatsbusEt(a) ?: return@forEach
+                        val etB = aiyatsbusEt(b) ?: return@forEach
+                        etA.limitations.limitations.add(CONFLICT_ENCHANT to b)
+                        etB.limitations.limitations.add(CONFLICT_ENCHANT to a)
+                    }
+                    conflicts.clear()
                 }
-                conflicts.clear()
             }
         }
     }

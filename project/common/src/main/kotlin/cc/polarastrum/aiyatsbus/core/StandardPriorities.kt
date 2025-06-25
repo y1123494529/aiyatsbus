@@ -49,8 +49,6 @@ object StandardPriorities {
     const val PLAYER_DATA = 8
     /** 菜单系统优先级 */
     const val MENU = 9
-    /** 反非法物品检测优先级，最低优先级 */
-    const val ANTI_ILLEGAL_ITEM = 10
 
     /**
      * 获取数据属性优先级

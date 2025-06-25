@@ -37,6 +37,7 @@ import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.UIType
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.record
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.function.console
 import kotlin.collections.set
 
 @MenuComponent("FilterRarity")
@@ -55,6 +56,7 @@ object FilterRarityUI {
     fun init() {
         source.onReload {
             config = MenuConfiguration(source)
+            console().sendLang("configuration-reload", source.file!!.name)
         }
     }
 

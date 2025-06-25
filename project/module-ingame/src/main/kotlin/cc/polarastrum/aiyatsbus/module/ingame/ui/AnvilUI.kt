@@ -20,6 +20,7 @@ import cc.polarastrum.aiyatsbus.core.asLang
 import cc.polarastrum.aiyatsbus.core.asLangList
 import cc.polarastrum.aiyatsbus.core.data.CheckType
 import cc.polarastrum.aiyatsbus.core.fixedEnchants
+import cc.polarastrum.aiyatsbus.core.sendLang
 import cc.polarastrum.aiyatsbus.core.util.isNull
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.MenuComponent
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.config.MenuConfiguration
@@ -41,6 +42,7 @@ import cc.polarastrum.aiyatsbus.core.util.variable
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.record
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.function.console
 
 @MenuComponent("Anvil")
 object AnvilUI {
@@ -58,6 +60,7 @@ object AnvilUI {
     fun init() {
         source.onReload {
             config = MenuConfiguration(source)
+            console().sendLang("configuration-reload", source.file!!.name)
         }
     }
 

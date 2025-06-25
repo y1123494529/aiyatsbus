@@ -31,6 +31,7 @@ import org.bukkit.persistence.PersistentDataType
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.PlatformFactory
+import taboolib.common.platform.function.console
 import taboolib.module.chat.Source
 import taboolib.module.chat.component
 import taboolib.module.configuration.Config
@@ -304,6 +305,7 @@ class DefaultAiyatsbusDisplayManager : AiyatsbusDisplayManager {
         fun init() {
             conf.onReload {
                 onlinePlayers.forEach(Player::updateInventory)
+                console().sendLang("configuration-reload", conf.file!!.name)
             }
         }
     }

@@ -21,6 +21,7 @@ import cc.polarastrum.aiyatsbus.core.AiyatsbusPlayerDataHandler
 import cc.polarastrum.aiyatsbus.core.StandardPriorities
 import cc.polarastrum.aiyatsbus.core.data.PlayerData
 import cc.polarastrum.aiyatsbus.core.util.get
+import cc.polarastrum.aiyatsbus.core.util.reloadable
 import cc.polarastrum.aiyatsbus.core.util.set
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
@@ -64,8 +65,10 @@ class DefaultAiyatsbusPlayerDataHandler : AiyatsbusPlayerDataHandler {
         @Awake(LifeCycle.CONST)
         fun init() {
             PlatformFactory.registerAPI<AiyatsbusPlayerDataHandler>(DefaultAiyatsbusPlayerDataHandler())
-            registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.PLAYER_DATA) {
-                onlinePlayers.forEach(PlatformFactory.getAPI<AiyatsbusPlayerDataHandler>()::load)
+            reloadable {
+                registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.PLAYER_DATA) {
+                    onlinePlayers.forEach(PlatformFactory.getAPI<AiyatsbusPlayerDataHandler>()::load)
+                }
             }
         }
 

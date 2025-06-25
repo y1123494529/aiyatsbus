@@ -41,9 +41,7 @@ object ActionItemDamage : ActionItem.Resolver {
                 trim("to", then = int(0)),
                 trim("by", then = entity())
             ) { item, damage, entity ->
-                // TODO
-                TODO()
-//                Aiyatsbus.api().getMinecraftAPI().damageItemStack(item, damage, entity as LivingEntity)
+                Aiyatsbus.api().getMinecraftAPI().damageItemStack(item, damage, entity as LivingEntity)
             }
         }
     }

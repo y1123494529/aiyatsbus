@@ -18,11 +18,8 @@
  */
 package cc.polarastrum.aiyatsbus.module.ingame.ui
 
-import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantment
-import cc.polarastrum.aiyatsbus.core.asLang
+import cc.polarastrum.aiyatsbus.core.*
 import cc.polarastrum.aiyatsbus.core.data.CheckType
-import cc.polarastrum.aiyatsbus.core.etsAvailable
-import cc.polarastrum.aiyatsbus.core.fixedEnchants
 import cc.polarastrum.aiyatsbus.core.util.toBuiltComponent
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.*
 import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.config.MenuConfiguration
@@ -44,6 +41,7 @@ import cc.polarastrum.aiyatsbus.module.ingame.ui.internal.record
 import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.function.console
 import taboolib.module.chat.Source
 import taboolib.platform.util.modifyMeta
 
@@ -63,6 +61,7 @@ object ItemCheckUI {
     fun init() {
         source.onReload {
             config = MenuConfiguration(source)
+            console().sendLang("configuration-reload", source.file!!.name)
         }
     }
 

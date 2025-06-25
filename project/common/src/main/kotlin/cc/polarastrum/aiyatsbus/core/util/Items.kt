@@ -26,13 +26,12 @@ import taboolib.module.chat.colored
 import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyMeta
 
-// TODO
-///**
-// * 物品在铁砧上的操作数
-// */
-//var ItemStack.repairCost: Int
-//    get() = Aiyatsbus.api().getMinecraftAPI().getRepairCost(this)
-//    set(value) = Aiyatsbus.api().getMinecraftAPI().setRepairCost(this, value)
+/**
+ * 物品在铁砧上的操作数
+ */
+var ItemStack.repairCost: Int
+    get() = Aiyatsbus.api().getMinecraftAPI().getRepairCost(this)
+    set(value) = Aiyatsbus.api().getMinecraftAPI().setRepairCost(this, value)
 
 fun ItemStack.variables(reader: VariableReader = VariableReaders.BRACES, func: VariableFunction): ItemStack {
     return modifyMeta<ItemMeta> {

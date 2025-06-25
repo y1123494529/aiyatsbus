@@ -20,6 +20,7 @@ package cc.polarastrum.aiyatsbus.core.data
 
 import cc.polarastrum.aiyatsbus.core.StandardPriorities
 import cc.polarastrum.aiyatsbus.core.sendLang
+import cc.polarastrum.aiyatsbus.core.util.reloadable
 import taboolib.common.LifeCycle
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.registerLifeCycleTask
@@ -75,12 +76,17 @@ abstract class Registry<T : RegistryItem>(
 
     init {
         // 注册生命周期任务，在插件启用时自动初始化
-        registerLifeCycleTask(LifeCycle.LOAD, StandardPriorities.getDataProperty(registryId)) {
-            initialize()
-            // 监听配置文件重载事件
-            config.onReload {
-                loadItem()
-                console().sendLang("configuration-reload", config.file!!.name)
+        reloadable {
+            registerLifeCycleTask(LifeCycle.LOAD, StandardPriorities.getDataProperty(registryId)) {
+                initialize()
+                // 监听配置文件重载事件
+                if (!isLoaded) {
+                    config.onReload {
+                        loadItem()
+                        console().sendLang("configuration-reload", config.file!!.name)
+                    }
+                    isLoaded = true
+                }
             }
         }
     }
@@ -97,7 +103,6 @@ abstract class Registry<T : RegistryItem>(
             return
         }
         loadItem()
-        isLoaded = true
     }
 
     /**
