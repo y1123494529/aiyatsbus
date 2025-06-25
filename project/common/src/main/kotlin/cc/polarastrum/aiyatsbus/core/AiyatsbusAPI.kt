@@ -17,6 +17,7 @@
 package cc.polarastrum.aiyatsbus.core
 
 import cc.polarastrum.aiyatsbus.core.registration.AiyatsbusEnchantmentRegisterer
+import cc.polarastrum.aiyatsbus.core.script.AiyatsbusScriptHandler
 
 /**
  * Aiyatsbus API 接口
@@ -56,11 +57,23 @@ interface AiyatsbusAPI {
     fun getLanguage(): AiyatsbusLanguage
 
     /**
+     * 获取事件触发器
+     */
+    fun getEventExecutor(): AiyatsbusEventExecutor
+
+    /**
      * 获取 Aiyatsbus 中的 NMS 接口
      */
     fun getMinecraftAPI(): AiyatsbusMinecraftAPI
 
     fun getPlayerDataHandler(): AiyatsbusPlayerDataHandler
 
+    fun getScriptHandler(): AiyatsbusScriptHandler
+
     fun getEnchantmentFilter(): AiyatsbusEnchantmentFilter
+
+    /**
+     * 获取附魔调度器
+     */
+    fun getTickHandler(): AiyatsbusTickHandler
 }

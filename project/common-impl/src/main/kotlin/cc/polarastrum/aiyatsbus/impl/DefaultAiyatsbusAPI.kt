@@ -18,6 +18,7 @@ package cc.polarastrum.aiyatsbus.impl
 
 import cc.polarastrum.aiyatsbus.core.*
 import cc.polarastrum.aiyatsbus.core.registration.AiyatsbusEnchantmentRegisterer
+import cc.polarastrum.aiyatsbus.core.script.AiyatsbusScriptHandler
 import taboolib.common.platform.PlatformFactory
 import taboolib.common.util.t
 import taboolib.module.nms.nmsProxy
@@ -35,17 +36,23 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
 
     private val enchantmentManager = PlatformFactory.getAPI<AiyatsbusEnchantmentManager>()
 
+    private val eventExecutor = PlatformFactory.getAPI<AiyatsbusEventExecutor>()
+
     private val displayManager = PlatformFactory.getAPI<AiyatsbusDisplayManager>()
 
     private val language = PlatformFactory.getAPI<AiyatsbusLanguage>()
 
     private val playerDataHandler = PlatformFactory.getAPI<AiyatsbusPlayerDataHandler>()
 
+    private val scriptHandler = PlatformFactory.getAPI<AiyatsbusScriptHandler>()
+
     private lateinit var enchantmentRegisterer: AiyatsbusEnchantmentRegisterer
 
     private val minecraftAPI0 by lazy {
         proxy<AiyatsbusMinecraftAPI>("cc.polarastrum.aiyatsbus.impl.nms.DefaultAiyatsbusMinecraftAPI")
     }
+
+    private val tickHandler = PlatformFactory.getAPI<AiyatsbusTickHandler>()
 
     override fun getEnchantmentFilter(): AiyatsbusEnchantmentFilter {
         return enchantmentFilter
@@ -70,12 +77,24 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
         return displayManager
     }
 
+    override fun getEventExecutor(): AiyatsbusEventExecutor {
+        return eventExecutor
+    }
+
     override fun getLanguage(): AiyatsbusLanguage {
         return language
     }
 
     override fun getPlayerDataHandler(): AiyatsbusPlayerDataHandler {
         return playerDataHandler
+    }
+
+    override fun getScriptHandler(): AiyatsbusScriptHandler {
+        return scriptHandler
+    }
+
+    override fun getTickHandler(): AiyatsbusTickHandler {
+        return tickHandler
     }
 
     companion object {

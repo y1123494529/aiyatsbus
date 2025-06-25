@@ -16,22 +16,32 @@
  */
 package cc.polarastrum.aiyatsbus.core
 
+import com.google.common.collect.Table
+
 /**
  * Aiyatsbus
- * com.mcstarrysky.aiyatsbus.core.Aiyatsbus
+ * com.mcstarrysky.aiyatsbus.core.AiyatsbusTickHandler
  *
  * @author mical
- * @since 2024/2/17 15:31
+ * @since 2024/3/20 21:14
  */
-object Aiyatsbus {
+interface AiyatsbusTickHandler {
 
-    private var api: AiyatsbusAPI? = null
+    /**
+     * 获取所有附魔调度器
+     * AiyatsbusEnchantment -> 附魔对象
+     * String -> 调度器 ID
+     * Long -> 循环时间间隔
+     */
+    fun getRoutine(): Table<AiyatsbusEnchantment, String, Long>
 
-    fun api(): AiyatsbusAPI {
-        return api ?: error("AiyatsbusAPI has not finished loading, or failed to load!")
-    }
+    /**
+     * 重置所有附魔调度器
+     */
+    fun reset()
 
-    fun register(api: AiyatsbusAPI) {
-        Aiyatsbus.api = api
-    }
+    /**
+     * 开始运行
+     */
+    fun start()
 }

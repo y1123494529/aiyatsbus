@@ -14,24 +14,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.core
+package cc.polarastrum.aiyatsbus.core.data.trigger.event
+
+import cc.polarastrum.aiyatsbus.core.util.*
+import org.bukkit.entity.LivingEntity
+import org.bukkit.event.Event
+import org.bukkit.inventory.ItemStack
 
 /**
  * Aiyatsbus
- * com.mcstarrysky.aiyatsbus.core.Aiyatsbus
+ * com.mcstarrysky.aiyatsbus.core.data.trigger.event.EventResolver
  *
  * @author mical
- * @since 2024/2/17 15:31
+ * @since 2024/7/18 00:58
  */
-object Aiyatsbus {
-
-    private var api: AiyatsbusAPI? = null
-
-    fun api(): AiyatsbusAPI {
-        return api ?: error("AiyatsbusAPI has not finished loading, or failed to load!")
-    }
-
-    fun register(api: AiyatsbusAPI) {
-        Aiyatsbus.api = api
-    }
-}
+data class EventResolver<in T : Event>(
+    val entityResolver: Function2To2<T, String?, LivingEntity?, Boolean>,
+    val eventResolver: Function1<T> = Function1 { _ -> },
+    val itemResolver: Function3To2<T, String?, LivingEntity, ItemStack?, Boolean> = Function3To2 { _, _, _ -> null to1 false }
+)

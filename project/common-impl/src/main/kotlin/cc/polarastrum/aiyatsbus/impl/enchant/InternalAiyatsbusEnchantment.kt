@@ -17,6 +17,7 @@
 package cc.polarastrum.aiyatsbus.impl.enchant
 
 import cc.polarastrum.aiyatsbus.core.AiyatsbusEnchantmentBase
+import cc.polarastrum.aiyatsbus.core.data.trigger.Trigger
 import taboolib.module.configuration.Configuration
 import java.io.File
 
@@ -33,4 +34,8 @@ class InternalAiyatsbusEnchantment(
     config: Configuration
 ) : AiyatsbusEnchantmentBase(id, file, config) {
 
+    /**
+     * 附魔的触发器
+     */
+    override val trigger: Trigger = Trigger(config.getConfigurationSection("mechanisms"), this)
 }

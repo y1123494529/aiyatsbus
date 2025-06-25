@@ -20,6 +20,7 @@ import cc.polarastrum.aiyatsbus.core.data.*
 import cc.polarastrum.aiyatsbus.core.data.registry.Group
 import cc.polarastrum.aiyatsbus.core.data.registry.Rarity
 import cc.polarastrum.aiyatsbus.core.data.registry.Target
+import cc.polarastrum.aiyatsbus.core.data.trigger.Trigger
 import cc.polarastrum.aiyatsbus.core.util.roman
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
@@ -72,11 +73,6 @@ interface AiyatsbusEnchantment {
     val dependencies: Dependencies
 
     /**
-     * 附魔显示
-     */
-    val displayer: Displayer
-
-    /**
      * Bukkit 附魔实例, 在注册后赋值, 一般是 CraftEnchantment
      *
      * 在 1.20.2 及以下版本中, 这个是 LegacyCraftEnchantment
@@ -94,10 +90,10 @@ interface AiyatsbusEnchantment {
      */
     val variables: Variables
 
-//    /**
-//     * 附魔显示
-//     */
-//    val displayer: Displayer
+    /**
+     * 附魔显示
+     */
+    val displayer: Displayer
 
     /**
      * 附魔对象
@@ -109,10 +105,11 @@ interface AiyatsbusEnchantment {
      */
     val limitations: Limitations
 
-//    /**
-//     * 附魔的触发器
-//     */
-//    val trigger: Trigger?
+    /**
+     * 附魔的触发器
+     */
+    val trigger: Trigger?
+
 
     val inaccessible: Boolean
         get() = alternativeData.inaccessible ||
