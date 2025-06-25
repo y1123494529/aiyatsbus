@@ -20,3 +20,8 @@ include("project:module-registration:registration-v12103-vanilla")
 // 1.21.4 自定义附魔注册器
 include("project:module-registration:registration-v12104-paper")
 include("project:module-registration:registration-v12104-vanilla")
+
+include("project:module-ingame")
+include("project:module-script")
+include("project:module-script:script-fluxon")
+include("project:module-script:script-kether")

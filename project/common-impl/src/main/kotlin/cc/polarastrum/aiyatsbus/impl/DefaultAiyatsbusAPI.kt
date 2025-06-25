@@ -31,14 +31,20 @@ import taboolib.module.nms.nmsProxy
  */
 class DefaultAiyatsbusAPI : AiyatsbusAPI {
 
+    private val enchantmentFilter = PlatformFactory.getAPI<AiyatsbusEnchantmentFilter>()
+
     private val enchantmentManager = PlatformFactory.getAPI<AiyatsbusEnchantmentManager>()
+
+    private val displayManager = PlatformFactory.getAPI<AiyatsbusDisplayManager>()
 
     private val language = PlatformFactory.getAPI<AiyatsbusLanguage>()
 
+    private val playerDataHandler = PlatformFactory.getAPI<AiyatsbusPlayerDataHandler>()
+
     private lateinit var enchantmentRegisterer: AiyatsbusEnchantmentRegisterer
 
-    override fun getLanguage(): AiyatsbusLanguage {
-        return language
+    override fun getEnchantmentFilter(): AiyatsbusEnchantmentFilter {
+        return enchantmentFilter
     }
 
     override fun getEnchantmentManager(): AiyatsbusEnchantmentManager {
@@ -50,6 +56,18 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
             enchantmentRegisterer = registerer
         }
         return registerer
+    }
+
+    override fun getDisplayManager(): AiyatsbusDisplayManager {
+        return displayManager
+    }
+
+    override fun getLanguage(): AiyatsbusLanguage {
+        return language
+    }
+
+    override fun getPlayerDataHandler(): AiyatsbusPlayerDataHandler {
+        return playerDataHandler
     }
 
     companion object {

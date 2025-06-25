@@ -78,6 +78,11 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
         .getDeclaredField("cache")
         .apply { isAccessible = true }
 
+    override fun unfreezeRegistry() {
+        frozenField.set(enchantmentRegistry, false)
+        unregisteredIntrusiveHoldersField.set(enchantmentRegistry, IdentityHashMap<NMSEnchantment, Holder.c<NMSEnchantment>>())
+    }
+
     override fun replaceRegistry() {
         val api = PlatformFactory.getAPI<AiyatsbusEnchantmentManager>()
 
@@ -101,8 +106,10 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
         cache.set(bukkitRegistry, mutableMapOf<NamespacedKey, Enchantment>())
 
         // Unfreeze NMS registry
-        frozenField.set(enchantmentRegistry, false)
-        unregisteredIntrusiveHoldersField.set(enchantmentRegistry, IdentityHashMap<NMSEnchantment, Holder.c<NMSEnchantment>>())
+        unfreezeRegistry()
+    }
+
+    override fun freezeRegistry() {
     }
 
     override fun register(enchant: AiyatsbusEnchantmentBase): Enchantment {

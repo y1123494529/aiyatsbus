@@ -100,10 +100,7 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
         .getDeclaredField("cache")
         .apply { isAccessible = true }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun replaceRegistry() {
-        val api = PlatformFactory.getAPI<AiyatsbusEnchantmentManager>()
-
+    override fun unfreezeRegistry() {
         // Unfreeze NMS Item registry
         frozenField.set(itemRegistry, false)
         unregisteredIntrusiveHoldersField.set(itemRegistry, IdentityHashMap<Item, Holder.c<Item>>())
@@ -114,6 +111,13 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
             enchantmentRegistry,
             IdentityHashMap<NMSEnchantment, Holder.c<NMSEnchantment>>()
         )
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun replaceRegistry() {
+        val api = PlatformFactory.getAPI<AiyatsbusEnchantmentManager>()
+
+        unfreezeRegistry()
 
         val newRegistryMTB =
             BiFunction<NamespacedKey, NMSEnchantment, Enchantment> { key, registry ->
@@ -139,6 +143,10 @@ class DefaultModernEnchantmentRegisterer : ModernEnchantmentRegisterer {
         unregisteredIntrusiveHoldersField.set(enchantmentRegistry, IdentityHashMap<NMSEnchantment, Holder.c<NMSEnchantment>>())
 
         // Freeze registries when all enchantments were loaded
+        freezeRegistry()
+    }
+
+    override fun freezeRegistry() {
         registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.FREEZE_REGISTRY) {
             /*
             Creating an unbound tag set requires using reflection because the inner class is

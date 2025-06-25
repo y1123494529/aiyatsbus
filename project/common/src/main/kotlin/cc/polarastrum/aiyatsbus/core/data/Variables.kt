@@ -71,10 +71,10 @@ class Variables(
     val leveled: MutableMap<String, Pair1<String, Map<Int, String>>> = HashMap()
 
     /** 与物品强相关的数据，变量名对初始值 */
-    private val modifiable: MutableMap<String, Pair1<String, String>> = HashMap()
+    val modifiable: MutableMap<String, Pair1<String, String>> = HashMap()
 
     /** 常量，相当于附魔配置，变量名对值 */
-    private val ordinary: MutableMap<String, Any?> = HashMap()
+    val ordinary: MutableMap<String, Any?> = HashMap()
 
     init {
         // 解析等级相关变量

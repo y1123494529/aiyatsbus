@@ -72,6 +72,11 @@ interface AiyatsbusEnchantment {
     val dependencies: Dependencies
 
     /**
+     * 附魔显示
+     */
+    val displayer: Displayer
+
+    /**
      * Bukkit 附魔实例, 在注册后赋值, 一般是 CraftEnchantment
      *
      * 在 1.20.2 及以下版本中, 这个是 LegacyCraftEnchantment

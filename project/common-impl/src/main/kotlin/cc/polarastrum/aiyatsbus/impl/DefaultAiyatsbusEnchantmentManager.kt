@@ -227,6 +227,8 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
 
     override fun clearEnchantments() {
         for (enchant in byKeyMap.values) {
+            // 不卸载外部附魔
+            if (enchant in enchantmentsToRegister) continue
             enchant.file.isProcessingByWatcher = false
             enchant.file.unwatch()
             unregister(enchant)

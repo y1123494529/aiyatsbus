@@ -29,10 +29,14 @@ import cc.polarastrum.aiyatsbus.core.registration.AiyatsbusEnchantmentRegisterer
  */
 interface ModernEnchantmentRegisterer : AiyatsbusEnchantmentRegisterer {
 
+    fun unfreezeRegistry()
+
     /**
      * 替换注册表
      * 
      * 替换 Bukkit 的附魔注册表，确保自定义附魔能够正确注册和使用。
      */
     fun replaceRegistry()
+
+    fun freezeRegistry()
 }

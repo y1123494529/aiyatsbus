@@ -1,0 +1,54 @@
+
+
+#         Powered by TabooLib 6.2         #
+
+
+title: "附魔系统"
+shape:
+  - 'FFFFFFFFF'
+  - '  A B C  '
+  - 'FFFFFFFFF'
+
+template:
+  'F':
+    material: BLACK_STAINED_GLASS_PANE
+    name: "&7"
+  'A':
+    material: BOOK
+    name: "&{#C084FC}附魔图鉴"
+    lore:
+      - "&{#9CA3AF}浏览所有可用的附魔"
+      - "&{#9CA3AF}支持多种筛选方式"
+    feature:
+      functional:
+        keyword: "search"
+  'B':
+    material: COMPASS
+    name: "&{#34D399}附魔检测"
+    lore:
+      - "&{#9CA3AF}检测物品上的附魔"
+      - "&{#9CA3AF}查看详细属性信息"
+    feature:
+      functional:
+        keyword: "check"
+  'C':
+    material: ANVIL
+    name: "&{#FBBF24}铁砧模拟"
+    lore:
+      - "&{#9CA3AF}模拟铁砧附魔合并"
+      - "&{#9CA3AF}检查合并可行性"
+    feature:
+      functional:
+        keyword: "anvil"
+
+# 如果您需要返回上一页的按钮, 就取消下面的注释
+# 并将按钮 D 添加进配置文件最上方的 shape 抽象字符布局界面里
+# 这个返回上一页按钮点击后会调用命令
+# 这个命令是您在 config.yml 里配置的命令 (main-menu-back)
+
+  # 'D':
+  #   material: CLOCK
+  #   name: "&{#ddca57}返回上一菜单"
+  #   feature:
+  #     functional:
+  #       keyword: Back

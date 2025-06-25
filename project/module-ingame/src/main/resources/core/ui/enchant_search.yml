@@ -1,0 +1,130 @@
+#         Powered by TabooLib 6.2         #
+
+title: "&{#000000}附魔图鉴"
+# W - 按品质筛选
+# X - 按物品类型筛选  
+# Y - 按附魔类型筛选
+# Z - 按名称搜索
+# E - 附魔展示区域
+shape:
+  - 'FFFFFFFFF'
+  - 'FFEEEEEFF'
+  - 'WFEEEEEFY'
+  - 'XFEEEEEFZ'
+  - 'FFEEEEEFF'
+  - 'BFFPFNFFC'
+
+template:
+  'F':
+    material: BLACK_STAINED_GLASS_PANE
+    name: "&7"
+
+  'C':
+    material: BARRIER
+    name: "&{#EF4444}关闭菜单"
+    lore:
+      - "&{#9CA3AF}点击关闭当前菜单"
+      - ""
+      - "&{#EF4444}点击关闭"
+    feature:
+      close:
+
+  'B':
+    material: ARROW
+    name: "&{#3B82F6}返回主菜单"
+    lore:
+      - "&{#9CA3AF}返回附魔系统主菜单"
+      - ""
+      - "&{#3B82F6}点击返回"
+    feature:
+      functional:
+        keyword: Back
+
+  'P':
+    material: PAPER
+    name: "&{#F59E0B}上一页"
+    lore:
+      - "&{#9CA3AF}查看上一页附魔"
+      - ""
+      - "&{#F59E0B}点击翻页"
+    feature:
+      functional:
+        keyword: Previous
+
+  'N':
+    material: PAPER
+    name: "&{#F59E0B}下一页"
+    lore:
+      - "&{#9CA3AF}查看下一页附魔"
+      - ""
+      - "&{#F59E0B}点击翻页"
+    feature:
+      functional:
+        keyword: Next
+
+  'W':
+    material: DIAMOND
+    name: "&{#8B5CF6}品质筛选"
+    lore:
+      - "&{#9CA3AF}按附魔品质进行筛选"
+      - "&{#9CA3AF}当前筛选: &e{rarities}"
+      - ""
+      - "&{#8B5CF6}点击选择品质"
+      - "&{#9CA3AF}Shift + 点击清除筛选"
+    feature:
+      functional:
+        keyword: EnchantSearch:filter_rarity
+
+  'X':
+    material: COMPASS
+    name: "&{#10B981}物品类型筛选"
+    lore:
+      - "&{#9CA3AF}按适用物品类型筛选"
+      - "&{#9CA3AF}当前筛选: &e{targets}"
+      - ""
+      - "&{#10B981}点击选择物品类型"
+      - "&{#9CA3AF}Shift + 点击清除筛选"
+    feature:
+      functional:
+        keyword: EnchantSearch:filter_target
+
+  'Y':
+    material: BOOK
+    name: "&{#F97316}附魔类型筛选"
+    lore:
+      - "&{#9CA3AF}按附魔类型/定位筛选"
+      - "&{#9CA3AF}当前筛选: &e{groups}"
+      - ""
+      - "&{#F97316}点击选择附魔类型"
+      - "&{#9CA3AF}Shift + 点击清除筛选"
+    feature:
+      functional:
+        keyword: EnchantSearch:filter_group
+
+  'Z':
+    material: NAME_TAG
+    name: "&{#EC4899}名称搜索"
+    lore:
+      - "&{#9CA3AF}按附魔名称或描述搜索"
+      - "&{#9CA3AF}当前搜索: &e{strings}"
+      - ""
+      - "&{#EC4899}左击 &a✓包含关键词"
+      - "&{#9CA3AF}右击 &c✗排除关键词"
+      - "&{#9CA3AF}Shift + 点击 &e੦清除搜索"
+    feature:
+      functional:
+        keyword: EnchantSearch:filter_string
+
+  'E':
+    material: ENCHANTED_BOOK
+    name: "{enchant_display_lore}"
+    lore:
+      - "&{#9CA3AF}附魔: &e{enchant_display}"
+      - "&{#9CA3AF}等级: &e{level} &7/ &c{max_level}"
+      - "&{#9CA3AF}品质: {rarity_display}"
+      - "&{#9CA3AF}描述: &7{description}"
+      - ""
+      - "&{#3B82F6}点击查看详细信息"
+    feature:
+      functional:
+        keyword: EnchantSearch:enchant

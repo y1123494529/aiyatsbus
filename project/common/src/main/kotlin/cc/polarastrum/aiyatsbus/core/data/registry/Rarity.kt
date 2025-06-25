@@ -1,26 +1,10 @@
-/*
- *  Copyright (C) 2022-2024 PolarAstrumLab
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
 package cc.polarastrum.aiyatsbus.core.data.registry
 
 import cc.polarastrum.aiyatsbus.core.data.Dependencies
 import cc.polarastrum.aiyatsbus.core.data.Dependency
 import cc.polarastrum.aiyatsbus.core.data.Registry
 import cc.polarastrum.aiyatsbus.core.data.RegistryItem
-import taboolib.common5.util.replace
+import cc.polarastrum.aiyatsbus.core.util.replace
 import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.chat.component
 import taboolib.module.configuration.Config
@@ -45,7 +29,6 @@ data class Rarity @JvmOverloads constructor(
     val color: String = root.getString("color")!!,
     /** 稀有度权重，影响获取概率，默认为 100 */
     val weight: Int = root.getInt("weight", 100),
-    /** 头颅材质值，用于自定义头颅显示，默认为空字符串 */
     val skull: String = root.getString("skull", "")!!,
     /** 是否不可访问，为 true 时玩家无法获得该稀有度的附魔 */
     val inaccessible: Boolean = root.getBoolean("inaccessible", false),

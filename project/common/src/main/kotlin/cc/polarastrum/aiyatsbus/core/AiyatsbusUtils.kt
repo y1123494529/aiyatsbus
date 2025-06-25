@@ -119,37 +119,37 @@ fun aiyatsbusEt(key: NamespacedKey) = aiyatsbusEt(key.key)
  */
 fun aiyatsbusEts(rarity: Rarity) = Aiyatsbus.api().getEnchantmentManager().getEnchants().values.filter { it.rarity == rarity }
 
-//fun ItemStack.toDisplayMode(player: Player): ItemStack {
-//    return Aiyatsbus.api().getDisplayManager().display(this, player)
-//}
-//
-//fun ItemStack.toRevertMode(player: Player): ItemStack {
-//    return Aiyatsbus.api().getDisplayManager().undisplay(this, player)
-//}
-//
-///**
-// * 获取附魔的附魔书
-// */
-//fun AiyatsbusEnchantment.book(level: Int = basicData.maxLevel) = ItemStack(Material.ENCHANTED_BOOK).modifyMeta<ItemMeta> { addEt(this@book, level) }
-//
-///**
-// * 获取附魔的附魔书
-// */
-//fun Enchantment.book(level: Int = maxLevel) = (this as AiyatsbusEnchantment).book(level)
-//
-///**
-// * 获取该物品可用的所有附魔
-// */
-//fun ItemStack.etsAvailable(
-//    checkType: CheckType = CheckType.ANVIL,
-//    player: Player? = null
-//): List<AiyatsbusEnchantment> = Aiyatsbus.api().getEnchantmentManager().getEnchants().values.filter { !it.inaccessible && it.limitations.checkAvailable(checkType, this, player).isSuccess }
-//
-///**
-// * 从特定品质中根据附魔权重抽取一个附魔
-// */
-//fun Rarity.drawEt(): AiyatsbusEnchantment? = RandomList(*aiyatsbusEts(this).associateWith { it.alternativeData.weight }.toList().toTypedArray()).random()
-//
+fun ItemStack.toDisplayMode(player: Player): ItemStack {
+    return Aiyatsbus.api().getDisplayManager().display(this, player)
+}
+
+fun ItemStack.toRevertMode(player: Player): ItemStack {
+    return Aiyatsbus.api().getDisplayManager().undisplay(this, player)
+}
+
+/**
+ * 获取附魔的附魔书
+ */
+fun AiyatsbusEnchantment.book(level: Int = basicData.maxLevel) = ItemStack(Material.ENCHANTED_BOOK).modifyMeta<ItemMeta> { addEt(this@book, level) }
+
+/**
+ * 获取附魔的附魔书
+ */
+fun Enchantment.book(level: Int = maxLevel) = (this as AiyatsbusEnchantment).book(level)
+
+/**
+ * 获取该物品可用的所有附魔
+ */
+fun ItemStack.etsAvailable(
+    checkType: CheckType = CheckType.ANVIL,
+    player: Player? = null
+): List<AiyatsbusEnchantment> = Aiyatsbus.api().getEnchantmentManager().getEnchants().values.filter { !it.inaccessible && it.limitations.checkAvailable(checkType, this, player).isSuccess }
+
+/**
+ * 从特定品质中根据附魔权重抽取一个附魔
+ */
+fun Rarity.drawEt(): AiyatsbusEnchantment? = RandomList(*aiyatsbusEts(this).associateWith { it.alternativeData.weight }.toList().toTypedArray()).random()
+
 /**
  * 从物品元数据获取附魔并自动转换为 AiyatsbusEnchantment
  */
@@ -226,13 +226,13 @@ fun ItemStack.clearEts() {
     modifyMeta<ItemMeta> { clearEts() }
 }
 
-///**
-// * 从特定附魔列表中根据品质和附魔的权重抽取一个附魔
-// */
-//fun Collection<AiyatsbusEnchantment>.drawEt(): AiyatsbusEnchantment? {
-//    val rarity = RandomList(*associate { it.rarity to it.rarity.weight }.toList().toTypedArray()).random()
-//    return RandomList(*filter { rarity == it.rarity }.associateWith { it.alternativeData.weight }.toList().toTypedArray()).random()
-//}
+/**
+ * 从特定附魔列表中根据品质和附魔的权重抽取一个附魔
+ */
+fun Collection<AiyatsbusEnchantment>.drawEt(): AiyatsbusEnchantment? {
+    val rarity = RandomList(*associate { it.rarity to it.rarity.weight }.toList().toTypedArray()).random()
+    return RandomList(*filter { rarity == it.rarity }.associateWith { it.alternativeData.weight }.toList().toTypedArray()).random()
+}
 
 /**
  * 检查某个物品是否属于某一类物品
@@ -259,29 +259,29 @@ fun Enchantment.isInGroup(name: String): Boolean = isInGroup(aiyatsbusGroup(name
  */
 fun Enchantment.isInGroup(group: Group?): Boolean = group?.enchantments?.find { it.enchantmentKey == key } != null
 
-///**
-// * 玩家的菜单类型
-// */
-//var Player.menuMode
-//    get() = Aiyatsbus.api().getPlayerDataHandler().get(this).menuMode
-//    set(value) {
-//        Aiyatsbus.api().getPlayerDataHandler().get(this).menuMode = value
-//    }
-//
-///**
-// * 玩家的收藏夹
-// */
-//val Player.favorites get() = Aiyatsbus.api().getPlayerDataHandler().get(this).favorites
-//
-///**
-// * 玩家的过滤器
-// */
-//val Player.filters get() = Aiyatsbus.api().getPlayerDataHandler().get(this).filters
-//
-///**
-// * 玩家的冷却列表
-// */
-//val Player.cooldown get() = Aiyatsbus.api().getPlayerDataHandler().get(this).cooldown
+/**
+ * 玩家的菜单类型
+ */
+var Player.menuMode
+    get() = Aiyatsbus.api().getPlayerDataHandler().get(this).menuMode
+    set(value) {
+        Aiyatsbus.api().getPlayerDataHandler().get(this).menuMode = value
+    }
+
+/**
+ * 玩家的收藏夹
+ */
+val Player.favorites get() = Aiyatsbus.api().getPlayerDataHandler().get(this).favorites
+
+/**
+ * 玩家的过滤器
+ */
+val Player.filters get() = Aiyatsbus.api().getPlayerDataHandler().get(this).filters
+
+/**
+ * 玩家的冷却列表
+ */
+val Player.cooldown get() = Aiyatsbus.api().getPlayerDataHandler().get(this).cooldown
 
 /**
  * 获取分组

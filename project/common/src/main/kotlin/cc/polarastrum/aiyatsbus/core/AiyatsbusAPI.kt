@@ -49,4 +49,13 @@ interface AiyatsbusAPI {
      * @return 语言系统实例，负责多语言支持和文本管理
      */
     fun getLanguage(): AiyatsbusLanguage
+
+    /**
+     * 获取附魔展示接口
+     */
+    fun getDisplayManager(): AiyatsbusDisplayManager
+
+    fun getPlayerDataHandler(): AiyatsbusPlayerDataHandler
+
+    fun getEnchantmentFilter(): AiyatsbusEnchantmentFilter
 }
