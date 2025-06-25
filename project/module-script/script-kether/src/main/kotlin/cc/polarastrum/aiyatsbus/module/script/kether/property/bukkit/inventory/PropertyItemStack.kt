@@ -21,12 +21,12 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.bukkit.inventory
+package cc.polarastrum.aiyatsbus.module.script.kether.property.bukkit.inventory
 
 import cc.polarastrum.aiyatsbus.core.belongedTargets
 import cc.polarastrum.aiyatsbus.core.util.*
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta

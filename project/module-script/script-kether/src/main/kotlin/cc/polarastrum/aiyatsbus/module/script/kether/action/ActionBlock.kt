@@ -21,7 +21,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.action
+package cc.polarastrum.aiyatsbus.module.script.kether.action
 
 import taboolib.library.kether.ParsedAction
 import taboolib.module.kether.ScriptAction

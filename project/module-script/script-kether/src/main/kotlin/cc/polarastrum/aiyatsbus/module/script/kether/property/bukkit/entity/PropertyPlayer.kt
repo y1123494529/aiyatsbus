@@ -21,11 +21,11 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.bukkit.entity
+package cc.polarastrum.aiyatsbus.module.script.kether.property.bukkit.entity
 
 import cc.polarastrum.aiyatsbus.core.util.coerceBoolean
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
 import org.bukkit.Location
 import org.bukkit.WeatherType
 import org.bukkit.entity.Player

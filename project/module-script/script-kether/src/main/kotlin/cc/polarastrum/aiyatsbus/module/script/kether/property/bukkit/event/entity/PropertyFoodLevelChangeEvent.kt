@@ -14,11 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.bukkit.event.entity
+package cc.polarastrum.aiyatsbus.module.script.kether.property.bukkit.event.entity
 
 import cc.polarastrum.aiyatsbus.core.util.coerceInt
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import taboolib.common.OpenResult
 

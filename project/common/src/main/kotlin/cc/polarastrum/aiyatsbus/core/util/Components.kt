@@ -23,26 +23,20 @@ import taboolib.module.chat.ComponentText
 import taboolib.module.chat.component
 
 /**
- * 文本组件工具类
- * 
- * 提供文本格式化和组件转换功能。
- * 支持旧版文本格式转换、复合文本构建等操作。
+ * Aiyatsbus
+ * com.mcstarrysky.aiyatsbus.impl.registration.modern.Utils
  *
  * @author mical
  * @since 2024/2/17 17:07
  */
-
 /**
- * 旧版 JSON 解析器
- * 
- * 旧版 Gson 没有 parseString 静态方法，使用实例方法
+ * 旧版 JsonParser
+ * 旧版没有 parseString 静态方法
  */
 val JSON_PARSER = JsonParser()
 
 /**
  * 旧版文本序列化器
- * 
- * 配置了颜色代码、十六进制颜色等功能的序列化器
  */
 val LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder()
     .character('\u00a7')
@@ -51,20 +45,14 @@ val LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder()
     .build()
 
 /**
- * 将旧版文本转换为 Adventure Component
- * 
- * 支持 &a 等颜色代码格式的文本转换
- * 
- * @return 转换后的 Adventure Component
+ * 将带有 &a 之类的旧版文本转换为 Adventure Component
  */
 fun String.legacyToAdventure(): Component {
     return LEGACY_COMPONENT_SERIALIZER.deserialize(this)
 }
 
 /**
- * 将字符串列表构建为复合文本并上色
- * 
- * @return 构建后的复合文本列表，如果原列表为 null 则返回空列表
+ * 将 List<String> 构建为复合文本并上色
  */
 fun List<String>?.toBuiltComponent(): List<ComponentText> {
     return this?.map { it.component().buildColored() } ?: emptyList()

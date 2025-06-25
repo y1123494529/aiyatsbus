@@ -14,11 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.bukkit.entity
+package cc.polarastrum.aiyatsbus.module.script.kether.property.bukkit.entity
 
 import cc.polarastrum.aiyatsbus.core.util.coerceDouble
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
 import org.bukkit.entity.Damageable
 import taboolib.common.OpenResult
 

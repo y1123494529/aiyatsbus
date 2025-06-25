@@ -14,10 +14,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.bukkit.block.data
+package cc.polarastrum.aiyatsbus.module.script.kether.property.bukkit.block.data
 
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
 import org.bukkit.block.data.BlockData
 import taboolib.common.OpenResult
 

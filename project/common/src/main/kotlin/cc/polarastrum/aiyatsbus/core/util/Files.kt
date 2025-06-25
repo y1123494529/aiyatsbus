@@ -20,20 +20,14 @@ import taboolib.common5.FileWatcher
 import java.io.File
 
 /**
- * 文件操作工具类
- * 
- * 提供文件读取、监听等操作功能。
- * 支持递归读取文件夹、文件变更监听等高级功能。
+ * Aiyatsbus
+ * com.mcstarrysky.aiyatsbus.core.util.Files
  *
  * @author mical
  * @date 2024/8/27 17:21
  */
-
 /**
- * 递归读取文件夹内的所有指定后缀名文件
- * 
- * @param extension 文件扩展名（不包含点号）
- * @return 所有匹配的文件列表
+ * 嵌套读取文件夹内的所有指定后缀名的文件
  */
 fun File.deepRead(extension: String): List<File> {
     val files = mutableListOf<File>()
@@ -47,24 +41,14 @@ fun File.deepRead(extension: String): List<File> {
     return files
 }
 
-/**
- * 文件监听器对象
- * 
- * 提供文件变更监听功能，支持添加和移除监听器
- */
 object FileWatcher {
 
-    /** TabooLib 文件监听器实例 */
     private val fileWatcher = FileWatcher.INSTANCE
-    /** 已添加监听器的文件集合 */
     private val fileListeners = LinkedHashSet<File>()
-    /** 正在被监听器处理的文件集合 */
     private val watching = LinkedHashSet<File>()
 
     /**
      * 监听文件改动
-     * 
-     * @param callback 文件变更时的回调函数
      */
     fun File.watch(callback: (File) -> Unit) {
         if (!hasListener) {
@@ -87,8 +71,6 @@ object FileWatcher {
 
     /**
      * 检测文件是否正在被监听器处理
-     * 
-     * 防止重复处理同一个文件的变更事件
      */
     var File.isProcessingByWatcher: Boolean
         get() = this in watching && hasListener
@@ -96,9 +78,6 @@ object FileWatcher {
             if (value) watching += this else watching -= this
         }
 
-    /**
-     * 文件是否已添加监听器
-     */
     private var File.hasListener: Boolean
         get() = this in fileListeners
         set(value) {

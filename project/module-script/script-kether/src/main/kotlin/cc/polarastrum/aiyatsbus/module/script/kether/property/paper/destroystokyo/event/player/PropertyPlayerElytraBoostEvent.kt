@@ -14,12 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.paper.destroystokyo.event.player
+package cc.polarastrum.aiyatsbus.module.script.kether.property.paper.destroystokyo.event.player
 
 import com.destroystokyo.paper.event.player.PlayerElytraBoostEvent
 import cc.polarastrum.aiyatsbus.core.util.coerceBoolean
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
 import taboolib.common.OpenResult
 
 /**

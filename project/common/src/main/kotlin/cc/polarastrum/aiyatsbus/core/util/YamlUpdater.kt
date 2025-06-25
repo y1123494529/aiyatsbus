@@ -24,27 +24,16 @@ import taboolib.library.configuration.ConfigurationSection
 import taboolib.module.configuration.Configuration
 
 /**
- * YAML 配置文件更新器
- * 
- * 提供配置文件自动更新功能，支持从资源文件更新本地配置文件。
- * 保持注释不丢失，支持指定更新节点。
+ * module-starrysky
+ * com.mcstarrysky.starrysky.config.YamlUpdater
  *
  * @author 米擦亮
  * @since 2023/9/6 20:50
  */
 object YamlUpdater {
 
-    /**
-     * 从文件加载配置并自动更新
-     * 
-     * @param path 配置文件路径
-     * @param autoUpdate 是否启用自动更新
-     * @param updateNodes 需要更新的节点列表，为空时更新所有节点
-     * @param cache 缓存的配置，如果为 null 则从资源文件加载
-     * @return 加载后的配置对象
-     */
     fun loadFromFile(path: String, autoUpdate: Boolean = true, updateNodes: List<String> = emptyList(), cache: Configuration? = null): Configuration {
-        // 如果配置不存在，直接释放即可，并不需要任何检查操作
+        // 如果配置不存在, 直接释放即可, 并不需要任何检查操作
         if (!newFile(getDataFolder(), path, create = false).exists()) {
             return Configuration.loadFromFile(releaseResourceFile(path))
         }
@@ -55,7 +44,7 @@ object YamlUpdater {
             return Configuration.loadFromFile(configFile)
         }
 
-        // 由 Bukkit Configuration 加载配置，防止注释丢失
+        // 由 Bukkit Configuration 加载配置, 防止注释丢失
         val config = YamlConfiguration.loadConfiguration(configFile)
 
         // 读取 Jar 包内的对应配置文件
@@ -70,21 +59,13 @@ object YamlUpdater {
         return Configuration.loadFromOther(config)
     }
 
-    /**
-     * 读取并更新配置节点
-     * 
-     * @param cache 缓存配置（源配置）
-     * @param to 目标配置
-     * @param updateNodes 需要更新的节点列表
-     * @param updated 记录已更新的节点
-     */
     private fun read(cache: ConfigurationSection, to: org.bukkit.configuration.ConfigurationSection, updateNodes: List<String>, updated: MutableList<String>) {
         for (key in cache.getKeys(true)) {
             val root = key.split(".").first()
             if (root !in updateNodes && key !in updateNodes) {
                 continue
             }
-            // 旧版没有，添加
+            // 旧版没有, 添加
             if (!to.contains(key)) {
                 updated += "$key (+)"
                 to[key] = cache[key]

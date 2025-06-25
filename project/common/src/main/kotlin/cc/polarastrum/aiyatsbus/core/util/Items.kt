@@ -16,6 +16,7 @@
  */
 package cc.polarastrum.aiyatsbus.core.util
 
+import cc.polarastrum.aiyatsbus.core.Aiyatsbus
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
@@ -25,6 +26,7 @@ import taboolib.module.chat.colored
 import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyMeta
 
+// TODO
 ///**
 // * 物品在铁砧上的操作数
 // */

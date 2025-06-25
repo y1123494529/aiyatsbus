@@ -21,9 +21,9 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.action.game.item
+package cc.polarastrum.aiyatsbus.module.script.kether.action.game.item
 
-import cc.polarastrum.aiyatsbus.module.kether.LiveData
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData
 import org.bukkit.inventory.ItemStack
 import taboolib.module.nms.getItemTag
 import taboolib.module.nms.setItemTag

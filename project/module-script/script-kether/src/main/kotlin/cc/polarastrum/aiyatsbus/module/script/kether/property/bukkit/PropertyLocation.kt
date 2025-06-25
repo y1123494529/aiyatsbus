@@ -21,13 +21,13 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.bukkit
+package cc.polarastrum.aiyatsbus.module.script.kether.property.bukkit
 
 import cc.polarastrum.aiyatsbus.core.util.coerceDouble
 import cc.polarastrum.aiyatsbus.core.util.coerceFloat
 import cc.polarastrum.aiyatsbus.core.util.serialized
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.World

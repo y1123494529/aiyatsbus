@@ -14,14 +14,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.bukkit.entity
+package cc.polarastrum.aiyatsbus.module.script.kether.property.bukkit.entity
 
 import cc.polarastrum.aiyatsbus.core.util.coerceFloat
 import cc.polarastrum.aiyatsbus.core.util.coerceInt
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveEntity
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveLocation
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveEntity
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveLocation
 import org.bukkit.GameMode
 import org.bukkit.entity.HumanEntity
 import taboolib.common.OpenResult

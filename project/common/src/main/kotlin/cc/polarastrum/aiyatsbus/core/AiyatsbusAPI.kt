@@ -30,6 +30,11 @@ import cc.polarastrum.aiyatsbus.core.registration.AiyatsbusEnchantmentRegisterer
 interface AiyatsbusAPI {
 
     /**
+     * 获取附魔展示接口
+     */
+    fun getDisplayManager(): AiyatsbusDisplayManager
+
+    /**
      * 获取附魔管理器
      * 
      * @return 附魔管理器实例，负责附魔的注册、加载和查询
@@ -51,9 +56,9 @@ interface AiyatsbusAPI {
     fun getLanguage(): AiyatsbusLanguage
 
     /**
-     * 获取附魔展示接口
+     * 获取 Aiyatsbus 中的 NMS 接口
      */
-    fun getDisplayManager(): AiyatsbusDisplayManager
+    fun getMinecraftAPI(): AiyatsbusMinecraftAPI
 
     fun getPlayerDataHandler(): AiyatsbusPlayerDataHandler
 

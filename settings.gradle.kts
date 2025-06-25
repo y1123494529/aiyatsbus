@@ -25,3 +25,6 @@ include("project:module-ingame")
 include("project:module-script")
 include("project:module-script:script-fluxon")
 include("project:module-script:script-kether")
+
+include("project:module-nms")
+include("project:module-nms:nms-v12005")

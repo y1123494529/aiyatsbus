@@ -21,13 +21,13 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.action.game.item
+package cc.polarastrum.aiyatsbus.module.script.kether.action.game.item
 
-import cc.polarastrum.aiyatsbus.module.kether.*
-import cc.polarastrum.aiyatsbus.module.kether.util.getVariable
-import cc.polarastrum.aiyatsbus.module.kether.util.hasNextToken
-import cc.polarastrum.aiyatsbus.module.kether.util.nextPeek
-import cc.polarastrum.aiyatsbus.module.kether.util.setVariable
+import cc.polarastrum.aiyatsbus.module.script.kether.*
+import cc.polarastrum.aiyatsbus.module.script.kether.util.getVariable
+import cc.polarastrum.aiyatsbus.module.script.kether.util.hasNextToken
+import cc.polarastrum.aiyatsbus.module.script.kether.util.nextPeek
+import cc.polarastrum.aiyatsbus.module.script.kether.util.setVariable
 import org.bukkit.inventory.ItemStack
 import taboolib.common.LifeCycle
 import taboolib.common.inject.ClassVisitor.findInstance

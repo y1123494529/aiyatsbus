@@ -14,34 +14,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+package cc.polarastrum.aiyatsbus.module.script.kether.action.game
 
-import cc.polarastrum.aiyatsbus.core.Aiyatsbus
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
-import taboolib.common.platform.Platform
-import taboolib.common.platform.function.pluginVersion
-import taboolib.module.metrics.Metrics
-import taboolib.module.metrics.charts.SingleLineChart
+import cc.polarastrum.aiyatsbus.module.script.kether.operation.Operations
+import taboolib.module.kether.KetherParser
+import taboolib.module.kether.combinationParser
 
 /**
  * Aiyatsbus
- * com.mcstarrysky.aiyatsbus.impl.PluginMetrics
+ * com.mcstarrysky.aiyatsbus.module.kether.action.ActionOperation
  *
  * @author mical
- * @since 2024/3/19 23:20
+ * @since 2024/3/10 15:33
  */
-object PluginMetrics {
+object ActionOperation {
 
-    lateinit var metrics: Metrics
-        private set
-
-    @Awake(LifeCycle.ACTIVE)
-    private fun init() {
-        metrics = Metrics(21363, pluginVersion, Platform.BUKKIT)
-
-        // enchantments
-        metrics.addCustomChart(SingleLineChart("enchantments") {
-            Aiyatsbus.api().getEnchantmentManager().getEnchants().size
-        })
+    /**
+     * operation xxx args [ &int &text ]
+     */
+    @KetherParser(["operation"])
+    fun operationParser() = combinationParser {
+        it.group(text(), command("args", then = anyAsList()).option()).apply(it) { operation, args ->
+            now {
+                Operations.registered[operation]?.apply(args)
+            }
+        }
     }
 }

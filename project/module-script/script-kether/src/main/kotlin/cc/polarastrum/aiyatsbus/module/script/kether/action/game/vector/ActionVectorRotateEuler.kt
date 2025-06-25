@@ -21,7 +21,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.action.game.vector
+package cc.polarastrum.aiyatsbus.module.script.kether.action.game.vector
 
 import taboolib.module.effect.utils.VectorUtils
 

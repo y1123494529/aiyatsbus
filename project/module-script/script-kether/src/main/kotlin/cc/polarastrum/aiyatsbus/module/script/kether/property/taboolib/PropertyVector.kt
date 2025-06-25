@@ -21,11 +21,11 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.taboolib
+package cc.polarastrum.aiyatsbus.module.script.kether.property.taboolib
 
 import cc.polarastrum.aiyatsbus.core.util.coerceDouble
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
 import taboolib.common.OpenResult
 import taboolib.common.util.Vector
 

@@ -21,25 +21,25 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether
+package cc.polarastrum.aiyatsbus.module.script.kether
 
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.frameBy
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveBoolean
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveColor
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveDouble
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveEntity
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveFloat
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveInt
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveInventory
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveItemStack
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveLocation
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveLong
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.livePlayer
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveShort
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveStringList
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveVector
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.readerOf
-import cc.polarastrum.aiyatsbus.module.kether.action.ActionBlock
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.frameBy
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveBoolean
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveColor
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveDouble
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveEntity
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveFloat
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveInt
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveInventory
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveItemStack
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveLocation
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveLong
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.livePlayer
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveShort
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveStringList
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveVector
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.readerOf
+import cc.polarastrum.aiyatsbus.module.script.kether.action.ActionBlock
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory

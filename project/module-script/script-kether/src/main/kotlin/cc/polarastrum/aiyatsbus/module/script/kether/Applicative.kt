@@ -21,7 +21,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether
+package cc.polarastrum.aiyatsbus.module.script.kether
 
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicInteger

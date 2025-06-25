@@ -21,9 +21,9 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether.util
+package cc.polarastrum.aiyatsbus.module.script.kether.util
 
-import cc.polarastrum.aiyatsbus.module.kether.action.ActionBlock
+import cc.polarastrum.aiyatsbus.module.script.kether.action.ActionBlock
 import org.bukkit.entity.Player
 import taboolib.common.platform.ProxyPlayer
 import taboolib.library.kether.*

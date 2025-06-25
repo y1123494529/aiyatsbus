@@ -14,12 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.module.kether.property.aiyatsbus.event
+package cc.polarastrum.aiyatsbus.module.script.kether.property.aiyatsbus.event
 
 import cc.polarastrum.aiyatsbus.core.event.AiyatsbusPrepareAnvilEvent
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusGenericProperty
-import cc.polarastrum.aiyatsbus.module.kether.AiyatsbusProperty
-import cc.polarastrum.aiyatsbus.module.kether.LiveData.Companion.liveItemStack
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusGenericProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.AiyatsbusProperty
+import cc.polarastrum.aiyatsbus.module.script.kether.LiveData.Companion.liveItemStack
 import taboolib.common.OpenResult
 
 /**

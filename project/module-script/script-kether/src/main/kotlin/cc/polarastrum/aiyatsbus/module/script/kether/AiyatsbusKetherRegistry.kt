@@ -21,7 +21,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package cc.polarastrum.aiyatsbus.module.kether
+package cc.polarastrum.aiyatsbus.module.script.kether
 
 import taboolib.common.inject.ClassVisitor.findInstance
 import taboolib.common.platform.function.warning

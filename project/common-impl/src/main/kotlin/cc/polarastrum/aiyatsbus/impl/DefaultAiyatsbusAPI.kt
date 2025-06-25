@@ -43,6 +43,10 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
 
     private lateinit var enchantmentRegisterer: AiyatsbusEnchantmentRegisterer
 
+    private val minecraftAPI0 by lazy {
+        proxy<AiyatsbusMinecraftAPI>("cc.polarastrum.aiyatsbus.impl.nms.DefaultAiyatsbusMinecraftAPI")
+    }
+
     override fun getEnchantmentFilter(): AiyatsbusEnchantmentFilter {
         return enchantmentFilter
     }
@@ -56,6 +60,10 @@ class DefaultAiyatsbusAPI : AiyatsbusAPI {
             enchantmentRegisterer = registerer
         }
         return registerer
+    }
+
+    override fun getMinecraftAPI(): AiyatsbusMinecraftAPI {
+        return minecraftAPI0
     }
 
     override fun getDisplayManager(): AiyatsbusDisplayManager {

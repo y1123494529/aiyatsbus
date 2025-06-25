@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package cc.polarastrum.aiyatsbus.module.kether.action
+package cc.polarastrum.aiyatsbus.module.script.kether.action
 
 import taboolib.module.kether.KetherParser
 import taboolib.module.kether.combinationParser
@@ -42,7 +42,7 @@ object ActionInstance {
                 try {
                     // 缓存
                     val clazz = cache.computeIfAbsent(cast) { Class.forName(cast) }
-                    clazz.isInstance(obj)
+                    clazz.isInstance (obj)
                 } catch (_: Throwable) {
                     false
                 }
