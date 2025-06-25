@@ -79,30 +79,6 @@ object AiyatsbusSettings {
     var commandAliases = listOf("spe", "splendidenchants", "nerous", "nos", "nereusopus")
 
     /**
-     * 是否开启自动修改玩家背包内非法物品
-     * 检测并修复玩家背包中的非法附魔物品
-     * 默认值：false
-     */
-    @ConfigNode("Settings.anti-illegal-item.enable")
-    var enableAntiIllegalItem = false
-
-    /**
-     * 自动修改玩家背包内非法物品的检测时间间隔
-     * 单位：秒
-     * 默认值：60
-     */
-    @ConfigNode("Settings.anti-illegal-item.interval")
-    var antiIllegalItemInterval = 60L
-
-//    /**
-//     * 自动修改玩家背包内非法物品的检测列表
-//     */
-//    @delegate:ConfigNode("Settings.anti-illegal-item.check-list")
-//    val antiIllegalItemCheckList by conversion<List<String>, List<LimitType>> {
-//        toTypedArray().map(LimitType::valueOf)
-//    }
-
-    /**
      * 是否开启 ItemsAdder 支持
      * 启用对 ItemsAdder 插件的兼容支持
      * 默认值：false
@@ -117,22 +93,6 @@ object AiyatsbusSettings {
      */
     @ConfigNode("Settings.enable-kether-preheat")
     var enableKetherPreheat = true
-
-    /**
-     * 是否开启性能检测工具
-     * 启用性能监控和检测功能
-     * 默认值：false
-     */
-    @ConfigNode("Settings.enable-performance-tool")
-    var enablePerformanceTool = false
-
-    /**
-     * 是否显示性能监控的详情信息
-     * 在性能监控中显示详细信息
-     * 默认值：false
-     */
-    @ConfigNode("Settings.show-performance-details")
-    var showPerformanceDetails = false
 
     /**
      * 对于附魔的挖掘放置攻击生物等操作，OP 是否无视领地等保护
@@ -182,6 +142,3 @@ object AiyatsbusSettings {
     @ConfigNode("Settings.updater.contents")
     var updateContents = emptyList<String>()
 }
-
-/** Aiyatsbus 插件前缀，用于消息显示 */
-const val AIYATSBUS_PREFIX = "&8[&{#D8D8FA}Aiyatsbus&8]&7"

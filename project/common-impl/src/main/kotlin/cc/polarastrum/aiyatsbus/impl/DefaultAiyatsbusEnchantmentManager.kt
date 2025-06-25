@@ -17,6 +17,7 @@
 package cc.polarastrum.aiyatsbus.impl
 
 import cc.polarastrum.aiyatsbus.core.*
+import cc.polarastrum.aiyatsbus.core.compat.EnchantRegistrationHooks
 import cc.polarastrum.aiyatsbus.core.registration.modern.ModernEnchantmentRegisterer
 import cc.polarastrum.aiyatsbus.core.util.FileWatcher.isProcessingByWatcher
 import cc.polarastrum.aiyatsbus.core.util.FileWatcher.unwatch
@@ -96,11 +97,11 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
             byKeyStringMap[enchantment.basicData.id] = ench
             byNameMap[enchantment.basicData.name] = ench
         }
-//        EnchantRegistrationHooks.registerHooks()
+        EnchantRegistrationHooks.registerHooks()
     }
 
     override fun unregister(enchantment: AiyatsbusEnchantment) {
-//        enchantment.trigger?.onDisable()
+        enchantment.trigger?.onDisable()
         enchantmentsToRegister.remove(enchantment)
         Aiyatsbus.api().getEnchantmentRegisterer().unregister(enchantment)
         byKeyMap -= enchantment.enchantmentKey
@@ -212,7 +213,7 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
      */
     private fun reloadEnchantment(file: File, key: NamespacedKey, id: String, startTime: Long) {
         val oldEnchant = getEnchant(key) ?: return
-//        oldEnchant.trigger?.onDisable()
+        oldEnchant.trigger?.onDisable()
         unregister(oldEnchant)
 
         val newEnchant = InternalAiyatsbusEnchantment(id, file, Configuration.loadFromFile(file))
@@ -222,8 +223,8 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
         onlinePlayers.forEach(Player::updateInventory)
         
         console().sendLang("enchantment-reload", id, System.currentTimeMillis() - startTime)
-//        EnchantRegistrationHooks.unregisterHooks()
-//        EnchantRegistrationHooks.registerHooks()
+        EnchantRegistrationHooks.unregisterHooks()
+        EnchantRegistrationHooks.registerHooks()
     }
 
     override fun clearEnchantments() {

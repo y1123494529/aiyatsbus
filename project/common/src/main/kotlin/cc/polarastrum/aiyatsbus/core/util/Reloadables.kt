@@ -68,6 +68,7 @@ object Reloadables : ClassVisitor() {
 }
 
 fun reloadable(func: Consumer<Any>) {
+    func.accept(0)
     // toString 随便 put 进一个
     Reloadables.registered.put(System.currentTimeMillis(), func)
 }
