@@ -16,40 +16,30 @@
  */
 package cc.polarastrum.aiyatsbus.module.ingame.mechanics.display
 
-import cc.polarastrum.aiyatsbus.core.toDisplayMode
-import cc.polarastrum.aiyatsbus.core.util.isNull
+import cc.polarastrum.aiyatsbus.core.Aiyatsbus
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.module.nms.NMSItemTag
 import taboolib.module.nms.PacketSendEvent
 
 /**
  * Aiyatsbus
- * com.mcstarrysky.aiyatsbus.module.listener.packet.PacketWIndowItems
+ * com.mcstarrysky.aiyatsbus.module.listener.packet.PacketOpenWindowMerchant
  *
  * @author mical
- * @since 2024/2/18 00:43
+ * @since 2024/2/18 00:34
  */
-object PacketWindowItems {
+object PacketOpenWindowMerchant {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun e(e: PacketSendEvent) {
-        if (e.packet.name == "PacketPlayOutWindowItems" || e.packet.name == "ClientboundContainerSetContentPacket") {
+        if (e.packet.name == "PacketPlayOutOpenWindowMerchant" || e.packet.name == "ClientboundMerchantOffersPacket") {
             try {
-                val slots = e.packet.read<List<Any>>("items")!!.toMutableList()
-                for (i in slots.indices) {
-                    val bkItem = NMSItemTag.asBukkitCopy(slots[i])
-                    if (bkItem.isNull) continue
-                    val nmsItem = NMSItemTag.asNMSCopy(bkItem.toDisplayMode(e.player))
-                    slots[i] = nmsItem
-                }
-                e.packet.write("items", slots)
-
-                val cursor = e.packet.read<Any>("carriedItem")!! // carriedItem
-                val bkItem = NMSItemTag.asBukkitCopy(cursor)
-                if (bkItem.isNull) return
-                val nmsItem = NMSItemTag.asNMSCopy(bkItem.toDisplayMode(e.player))
-                e.packet.write("carriedItem", nmsItem)
+                // 1.16 - 1.20.4 全部版本都可以直接读 b, 1.20.5 改成 c
+                Aiyatsbus.api().getMinecraftAPI()
+                    .adaptMerchantRecipe(
+                        e.packet.read<Any>("offers")!!,
+                        e.player
+                    )
             } catch (e: Throwable) {
                 e.printStackTrace()
             }
