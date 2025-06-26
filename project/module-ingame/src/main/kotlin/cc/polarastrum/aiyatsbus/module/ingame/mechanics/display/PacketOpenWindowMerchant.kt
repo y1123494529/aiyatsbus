@@ -19,7 +19,6 @@ package cc.polarastrum.aiyatsbus.module.ingame.mechanics.display
 import cc.polarastrum.aiyatsbus.core.Aiyatsbus
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.module.nms.MinecraftVersion
 import taboolib.module.nms.PacketSendEvent
 
 /**
@@ -38,7 +37,7 @@ object PacketOpenWindowMerchant {
                 // 1.16 - 1.20.4 全部版本都可以直接读 b, 1.20.5 改成 c
                 Aiyatsbus.api().getMinecraftAPI()
                     .adaptMerchantRecipe(
-                        e.packet.read<Any>(if (MinecraftVersion.isUniversal) "offers" else "b")!!,
+                        e.packet.read<Any>("offers")!!,
                         e.player
                     )
             } catch (e: Throwable) {
