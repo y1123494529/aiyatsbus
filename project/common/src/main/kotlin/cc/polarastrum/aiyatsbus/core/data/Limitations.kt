@@ -1,3 +1,19 @@
+/*
+ *  Copyright (C) 2022-2024 PolarAstrumLab
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package cc.polarastrum.aiyatsbus.core.data
 
 import cc.polarastrum.aiyatsbus.core.*
@@ -19,12 +35,14 @@ import taboolib.platform.compat.replacePlaceholder
 
 /**
  * 附魔限制管理类
- * 
+ *
  * 负责管理附魔的各种限制条件，包括冲突检查、依赖检查、权限检查等。
  * 支持多种检查类型：获取、商人交易、铁砧合成、使用等。
- * 
+ * 通过配置文件定义限制规则，支持复杂的条件判断。
+ *
  * @param belonging 所属的附魔
  * @param lines 限制配置行列表
+ *
  * @author mical
  * @since 2024/2/18 10:15
  */
@@ -41,7 +59,10 @@ data class Limitations(
 
     /**
      * 构建限制条件集合
-     * 
+     *
+     * 解析配置行，构建限制条件集合。
+     * 支持冲突附魔、冲突分组、依赖附魔、依赖分组等多种限制类型。
+     *
      * @return 限制条件集合
      */
     private fun buildLimitations(): Set<Pair<LimitType, String>> {
@@ -87,9 +108,10 @@ data class Limitations(
 
     /**
      * 检查操作是否被允许
-     * 
+     *
      * 检查附魔是否可以应用到物品上、使用时是否可以生效、村民生成新交易等。
-     * 
+     * 根据检查类型和物品信息进行相应的限制检查。
+     *
      * @param checkType 检查类型
      * @param item 相关物品（如正在被附魔的书、正在使用的剑等）
      * @param creature 生物实体（通常是玩家）
@@ -109,7 +131,9 @@ data class Limitations(
 
     /**
      * 检查操作是否被允许（重载方法）
-     * 
+     *
+     * 根据指定的限制类型集合进行检查。
+     *
      * @param limits 要检查的限制类型集合
      * @param item 相关物品
      * @param use 是否为使用操作
@@ -160,7 +184,9 @@ data class Limitations(
 
     /**
      * 检查 PAPI 表达式
-     * 
+     *
+     * 使用 PlaceholderAPI 和 JEXL 引擎计算表达式结果。
+     *
      * @param expression 表达式
      * @param creature 生物实体
      * @return 检查结果
@@ -176,7 +202,9 @@ data class Limitations(
 
     /**
      * 检查权限
-     * 
+     *
+     * 检查生物实体是否具有指定权限。
+     *
      * @param permission 权限节点
      * @param creature 生物实体
      * @return 检查结果
@@ -187,7 +215,9 @@ data class Limitations(
 
     /**
      * 检查禁用世界
-     * 
+     *
+     * 检查生物实体所在世界是否在禁用列表中。
+     *
      * @param creature 生物实体
      * @return 检查结果
      */
@@ -197,7 +227,9 @@ data class Limitations(
 
     /**
      * 检查物品相关限制
-     * 
+     *
+     * 根据限制类型检查物品相关的限制条件。
+     *
      * @param type 限制类型
      * @param item 物品
      * @param value 限制值
@@ -231,6 +263,13 @@ data class Limitations(
 
     /**
      * 检查槽位限制
+     *
+     * 检查物品是否可以在指定槽位使用。
+     *
+     * @param itemType 物品类型
+     * @param slot 装备槽位
+     * @param ignoreSlot 是否忽略槽位检查
+     * @return 检查结果
      */
     private fun checkSlot(itemType: Material, slot: EquipmentSlot?, ignoreSlot: Boolean): Boolean {
         if (slot == null) return ignoreSlot
@@ -239,6 +278,12 @@ data class Limitations(
 
     /**
      * 检查目标限制
+     *
+     * 检查物品类型是否符合附魔的目标要求。
+     *
+     * @param itemType 物品类型
+     * @param use 是否为使用操作
+     * @return 检查结果
      */
     private fun checkTarget(itemType: Material, use: Boolean): Boolean {
         return belonging.targets.any { itemType.isInTarget(it) } || 
@@ -247,6 +292,12 @@ data class Limitations(
 
     /**
      * 检查最大附魔数量限制
+     *
+     * 检查物品是否还有空间添加新的附魔。
+     *
+     * @param itemType 物品类型
+     * @param enchants 当前附魔列表
+     * @return 检查结果
      */
     private fun checkMaxCapability(itemType: Material, enchants: Map<AiyatsbusEnchantment, Int>): Boolean {
         return itemType.capability > enchants.size
@@ -254,6 +305,12 @@ data class Limitations(
 
     /**
      * 检查依赖附魔
+     *
+     * 检查物品是否具有指定的依赖附魔。
+     *
+     * @param value 依赖附魔名称
+     * @param enchants 当前附魔列表
+     * @return 检查结果
      */
     private fun checkDependenceEnchant(value: String, enchants: Map<AiyatsbusEnchantment, Int>): Boolean {
         return enchants.containsKey(aiyatsbusEt(value))
@@ -261,6 +318,12 @@ data class Limitations(
 
     /**
      * 检查冲突附魔
+     *
+     * 检查物品是否具有指定的冲突附魔。
+     *
+     * @param value 冲突附魔名称
+     * @param enchants 当前附魔列表
+     * @return 检查结果
      */
     private fun checkConflictEnchant(value: String, enchants: Map<AiyatsbusEnchantment, Int>): Boolean {
         return !enchants.containsKey(aiyatsbusEt(value))
@@ -268,6 +331,12 @@ data class Limitations(
 
     /**
      * 检查依赖附魔组
+     *
+     * 检查物品是否具有指定分组中的任何附魔。
+     *
+     * @param value 依赖分组名称
+     * @param enchants 当前附魔列表
+     * @return 检查结果
      */
     private fun checkDependenceGroup(value: String, enchants: Map<AiyatsbusEnchantment, Int>): Boolean {
         return enchants.any { (enchant, _) -> 
@@ -277,6 +346,12 @@ data class Limitations(
 
     /**
      * 检查冲突附魔组
+     *
+     * 检查物品是否具有指定分组中的附魔，并检查是否超过最大共存数量。
+     *
+     * @param value 冲突分组名称
+     * @param enchants 当前附魔列表
+     * @return 检查结果
      */
     private fun checkConflictGroup(value: String, enchants: Map<AiyatsbusEnchantment, Int>): Boolean {
         val group = aiyatsbusGroup(value)
@@ -289,7 +364,9 @@ data class Limitations(
 
     /**
      * 检查是否与指定附魔冲突
-     * 
+     *
+     * 检查当前附魔是否与指定的附魔存在冲突关系。
+     *
      * @param other 要检查的附魔
      * @return 是否冲突
      */
@@ -309,6 +386,11 @@ data class Limitations(
         }
     }
 
+    /**
+     * 附魔限制管理类伴生对象
+     *
+     * 负责处理附魔冲突关系的初始化和管理。
+     */
     companion object {
 
         /** 记录单向附魔冲突，开服后自动挂双向 */
@@ -319,6 +401,8 @@ data class Limitations(
 
         /**
          * 插件启用时的初始化
+         *
+         * 处理附魔冲突关系，将单向冲突转换为双向冲突。
          */
         @Awake(LifeCycle.LOAD)
         fun onEnable() {
@@ -349,7 +433,9 @@ data class Limitations(
 
 /**
  * 检查结果密封类
- * 
+ *
+ * 表示限制检查的结果，包含成功或失败状态以及失败原因。
+ *
  * @param isSuccess 是否成功
  * @param reason 失败原因
  */
@@ -367,8 +453,9 @@ sealed class CheckResult(val isSuccess: Boolean, val reason: String) {
 
 /**
  * 检查类型枚举
- * 
- * 定义了不同的检查场景和对应的限制类型
+ *
+ * 定义了不同的检查场景和对应的限制类型。
+ * 每种检查类型都有其特定的限制类型集合。
  */
 enum class CheckType(vararg types: LimitType) {
 
@@ -417,8 +504,9 @@ enum class CheckType(vararg types: LimitType) {
 
 /**
  * 限制类型枚举
- * 
- * 定义了各种限制条件的类型
+ *
+ * 定义了各种限制条件的类型。
+ * 每种类型都有其特定的检查逻辑和处理方式。
  */
 enum class LimitType {
 
@@ -449,6 +537,6 @@ enum class LimitType {
     /** 禁用世界限制，如 world_the_end */
     DISABLE_WORLD,
     
-    /** 装备槽位限制，如 HAND */
+    /** 槽位限制，如只能在主手生效 */
     SLOT
 }

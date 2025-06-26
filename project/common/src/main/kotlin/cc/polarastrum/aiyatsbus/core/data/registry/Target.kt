@@ -33,6 +33,15 @@ import kotlin.jvm.optionals.getOrNull
  *
  * 定义附魔可以应用的目标物品类型和装备槽位。
  * 支持指定物品材质、装备槽位、最大附魔数量等配置。
+ * 用于限制附魔只能应用在特定类型的物品上。
+ *
+ * @param root 配置根节点，包含所有附魔目标的配置信息
+ * @param dependencies 依赖项配置，定义该附魔目标的前置条件
+ * @param name 附魔目标名称
+ * @param capability 最大附魔数量，限制该目标物品可以拥有的附魔数量
+ * @param activeSlots 激活槽位列表，指定附魔在哪些装备槽位生效
+ * @param types 支持的物品类型列表，指定附魔可以应用的物品材质
+ * @param skull 头颅材质值，用于自定义头颅显示
  *
  * @author mical
  * @since 2025/6/20 20:25
@@ -57,7 +66,9 @@ data class Target @JvmOverloads constructor(
 
     /**
      * 附魔目标注册器伴生对象
-     * 负责从配置文件中加载和管理附魔目标数据
+     *
+     * 负责从配置文件中加载和管理附魔目标数据。
+     * 提供全局访问点来获取和管理所有附魔目标。
      */
     companion object : Registry<Target>("target", { section -> Target(section) }) {
 

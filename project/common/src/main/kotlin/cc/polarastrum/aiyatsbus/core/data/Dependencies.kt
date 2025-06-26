@@ -22,7 +22,7 @@ import taboolib.module.nms.MinecraftVersion
 
 /**
  * 依赖接口
- * 
+ *
  * 标记需要依赖检查的组件。
  * 实现此接口的类必须提供依赖项配置。
  *
@@ -37,7 +37,7 @@ interface Dependency {
 
 /**
  * 依赖项管理类
- * 
+ *
  * 管理组件的依赖条件，包括 Minecraft 版本支持、数据包依赖和插件依赖。
  * 提供依赖检查功能，确保组件在满足所有条件时才能正常使用。
  *
@@ -68,18 +68,26 @@ class Dependencies(
 
     /**
      * 版本支持范围
-     * 使用 Kotlin 范围语法表示支持的版本区间
+     *
+     * 使用 Kotlin 范围语法表示支持的版本区间。
      */
     private val supportsRange = supportsLowest..supportsHighest
 
     /**
      * 检查依赖是否可用
-     * 
+     *
      * 检查当前 Minecraft 版本是否在支持范围内，
      * 检查所有必需的数据包是否已启用，
      * 检查所有必需的插件是否已加载。
-     * 
+     *
      * @return true 表示所有依赖条件都满足，false 表示存在不满足的依赖
+     *
+     * @example
+     * ```kotlin
+     * if (dependencies.checkAvailable()) {
+     *     // 依赖满足
+     * }
+     * ```
      */
     fun checkAvailable(): Boolean {
         return MinecraftVersion.versionId in supportsRange &&

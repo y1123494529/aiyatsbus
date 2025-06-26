@@ -24,7 +24,7 @@ import java.math.RoundingMode
 
 /**
  * Aiyatsbus 系统设置
- * 
+ *
  * 管理 Aiyatsbus 插件的所有配置选项。
  * 支持自动重载配置，提供丰富的自定义选项。
  *

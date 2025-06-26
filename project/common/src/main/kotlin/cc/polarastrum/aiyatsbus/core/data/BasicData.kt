@@ -46,11 +46,18 @@ data class BasicData(
 ) {
 
     /**
-     * uncolored() 是通过 bungee-chat 的 ChatColor 去色的
-     * 所以 TabooLib 提供的颜色格式必须先通过 colored() 转为 bungee-chat 的颜色格式
-     * 再通过 uncolored() 去色
+     * 原始名称（去除颜色代码）
+     *
+     * uncolored() 是通过 bungee-chat 的 ChatColor 去色的，
+     * 所以 TabooLib 提供的颜色格式必须先通过 colored() 转为 bungee-chat 的颜色格式，
+     * 再通过 uncolored() 去色。
      */
     val originName: String = name.colored().uncolored()
 
+    /**
+     * 名称是否包含颜色代码
+     *
+     * 通过比较原始名称和去色后的名称来判断是否包含颜色代码。
+     */
     val nameHasColor: Boolean = originName != name
 }

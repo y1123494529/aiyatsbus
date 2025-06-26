@@ -33,6 +33,16 @@ import taboolib.module.configuration.Configuration
  *
  * 用于将多个附魔组织在一起，管理附魔之间的互斥关系和共存限制。
  * 支持排除特定附魔、设置最大共存数量等功能。
+ * 可以通过品质批量添加附魔，也可以通过名称单独指定。
+ *
+ * @param root 配置根节点，包含所有附魔组的配置信息
+ * @param dependencies 依赖项配置，定义该附魔组的前置条件
+ * @param name 附魔组名称，默认为配置节点名称
+ * @param exclude 排除的附魔列表，这些附魔不会出现在该组中
+ * @param enchantments 包含的附魔列表，该组管理的所有附魔
+ * @param skull 头颅材质值，用于自定义头颅显示
+ * @param maxCoexist 最大共存数量，限制该组中附魔可以同时存在的最大数量，默认为 1
+ * @param inaccessible 是否不可访问，为 true 时玩家无法获得该附魔组的附魔
  *
  * @author mical
  * @since 2025/6/20 20:16
@@ -65,7 +75,9 @@ data class Group @JvmOverloads constructor(
 
     /**
      * 附魔组注册器伴生对象
-     * 负责从配置文件中加载和管理附魔组数据
+     *
+     * 负责从配置文件中加载和管理附魔组数据。
+     * 提供全局访问点来获取和管理所有附魔组。
      */
     companion object : Registry<Group>("group", { section -> Group(section) }) {
 

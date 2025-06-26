@@ -37,7 +37,7 @@ data class AlternativeData(
     val weight: Int = root?.getInt("weight", 100).coerceInt(100),
 
     /** 是否为原版附魔，用于检测原版附魔，默认为 false */
-    /** 3.0 的检测原版附魔的方法有点弱智, 把检测原版放到这里其实是更好的选择 */
+    /** 3.0 的检测原版附魔的方法有点弱智，把检测原版放到这里其实是更好的选择 */
     val isVanilla: Boolean = (root?.getBoolean("is-vanilla", false) ?: root?.getBoolean("is_vanilla", false)).coerceBoolean(false),
 
     /** 是否可通过砂轮移除，默认为 true */
@@ -71,6 +71,11 @@ data class AlternativeData(
      * @param maxLevel 附魔的最大等级
      * @param globalLimit 全局等级限制
      * @return 实际可用的交易等级限制
+     *
+     * @example
+     * ```kotlin
+     * val limit = alternativeData.getTradeLevelLimit(5, 3) // 返回 3
+     * ```
      */
     fun getTradeLevelLimit(maxLevel: Int, globalLimit: Int): Int {
         return (if (tradeMaxLevel != -1) tradeMaxLevel else if (globalLimit != -1) globalLimit else maxLevel).coerceAtMost(maxLevel)
@@ -85,6 +90,11 @@ data class AlternativeData(
      * @param maxLevel 附魔的最大等级
      * @param globalLimit 全局等级限制
      * @return 实际可用的附魔台等级限制
+     *
+     * @example
+     * ```kotlin
+     * val limit = alternativeData.getEnchantMaxLevelLimit(5, 3) // 返回 3
+     * ```
      */
     fun getEnchantMaxLevelLimit(maxLevel: Int, globalLimit: Int): Int {
         return (if (enchantMaxLevel != -1) enchantMaxLevel else if (globalLimit != -1) globalLimit else maxLevel).coerceAtMost(maxLevel)
@@ -99,6 +109,11 @@ data class AlternativeData(
      * @param maxLevel 附魔的最大等级
      * @param globalLimit 全局等级限制
      * @return 实际可用的战利品等级限制
+     *
+     * @example
+     * ```kotlin
+     * val limit = alternativeData.getLootMaxLevelLimit(5, 3) // 返回 3
+     * ```
      */
     fun getLootMaxLevelLimit(maxLevel: Int, globalLimit: Int): Int {
         return (if (lootMaxLevel != -1) lootMaxLevel else if (globalLimit != -1) globalLimit else maxLevel).coerceAtMost(maxLevel)

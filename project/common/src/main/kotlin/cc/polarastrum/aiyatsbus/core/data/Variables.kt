@@ -55,8 +55,10 @@ enum class VariableType {
  *
  * 负责管理附魔系统中的各种变量，包括变量的解析、计算和存储。
  * 支持三种类型的变量：等级相关变量、物品相关变量和常量变量。
+ * 提供变量计算、修改和批量处理功能。
  *
  * @param root 配置根节点，包含所有变量的配置信息
+ *
  * @author mical
  * @since 2024/2/17 22:29
  */
@@ -107,6 +109,9 @@ class Variables(
     /**
      * 计算与等级有关的变量并返回结果
      *
+     * 根据当前等级选择最接近的配置，计算变量值。
+     * 支持嵌套变量解析和单位显示。
+     *
      * @param variable 变量名
      * @param level 当前等级
      * @param withUnit 是否包含单位
@@ -131,7 +136,8 @@ class Variables(
     /**
      * 计算物品变量并返回结果
      *
-     * 默认是从物品的 PDC 中获取，如果变量名开头为 (NBT) 则会自动去掉该开头并从物品 NBT 中寻找该变量
+     * 默认是从物品的 PDC 中获取，如果变量名开头为 (NBT) 则会自动去掉该开头并从物品 NBT 中寻找该变量。
+     * 如果物品为空或变量不存在，则返回默认值。
      *
      * @param variable 变量名
      * @param item 物品堆
@@ -149,6 +155,9 @@ class Variables(
 
     /**
      * 修改物品变量，可以使用 NBT
+     *
+     * 根据变量配置决定使用 PDC 还是 NBT 存储。
+     * 支持字符串类型的变量修改。
      *
      * @param item 要修改的物品
      * @param variable 变量名
@@ -172,6 +181,8 @@ class Variables(
     /**
      * 计算常量并返回结果
      *
+     * 直接返回配置中定义的常量值。
+     *
      * @param variable 变量名
      * @return 常量值
      */
@@ -180,7 +191,8 @@ class Variables(
     /**
      * 计算变量并得到值
      *
-     * 根据变量类型自动选择相应的计算方法
+     * 根据变量类型自动选择相应的计算方法。
+     * 提供统一的变量访问接口。
      *
      * @param variable 变量名
      * @param level 计算与等级有关的变量需要的等级
@@ -199,12 +211,15 @@ class Variables(
     /**
      * 自动计算所有的变量，并将所有结果放入 Map
      *
+     * 批量计算所有变量，返回变量名到计算结果的映射。
+     * 适用于需要一次性获取所有变量值的场景。
+     *
      * @param level 等级
-     * @param item 物品堆
+     * @param item 物品
      * @param withUnit 是否带单位
-     * @return 包含所有变量计算结果的映射
+     * @return 变量名到计算结果的映射
      */
     fun variables(level: Int, item: ItemStack? = null, withUnit: Boolean = false): Map<String, Any?> {
-        return variables.mapValues { variable(it.key, level, item, withUnit) }
+        return variables.keys.associateWith { variable(it, level, item, withUnit) }
     }
 }

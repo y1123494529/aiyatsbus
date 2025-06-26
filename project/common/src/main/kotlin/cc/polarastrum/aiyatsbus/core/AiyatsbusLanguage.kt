@@ -20,7 +20,7 @@ import org.bukkit.command.CommandSender
 
 /**
  * Aiyatsbus 语言系统接口
- * 
+ *
  * 提供多语言支持和文本管理功能。
  * 支持发送、获取和格式化多语言文本，支持前缀和参数替换。
  *
@@ -31,9 +31,9 @@ interface AiyatsbusLanguage {
 
     /**
      * 发送语言文本
-     * 
+     *
      * 向指定发送者发送格式化的语言文本。
-     * 
+     *
      * @param sender 消息接收者
      * @param key 语言键
      * @param args 格式化参数
@@ -42,9 +42,9 @@ interface AiyatsbusLanguage {
 
     /**
      * 获取语言文本
-     * 
+     *
      * 获取格式化的语言文本字符串。
-     * 
+     *
      * @param sender 用于确定语言的发送者
      * @param key 语言键
      * @param args 格式化参数
@@ -54,9 +54,9 @@ interface AiyatsbusLanguage {
 
     /**
      * 获取可空语言文本
-     * 
+     *
      * 获取格式化的语言文本，如果键不存在则返回 null。
-     * 
+     *
      * @param sender 用于确定语言的发送者
      * @param key 语言键
      * @param args 格式化参数
@@ -66,9 +66,9 @@ interface AiyatsbusLanguage {
 
     /**
      * 获取语言文本列表
-     * 
+     *
      * 获取格式化的语言文本列表。
-     * 
+     *
      * @param sender 用于确定语言的发送者
      * @param key 语言键
      * @param args 格式化参数

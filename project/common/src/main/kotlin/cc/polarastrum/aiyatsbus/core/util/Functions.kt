@@ -16,8 +16,6 @@
  */
 package cc.polarastrum.aiyatsbus.core.util
 
-import kotlin.Pair
-
 /**
  * 函数式接口工具类
  * 
@@ -36,6 +34,12 @@ import kotlin.Pair
  * 适用于需要执行副作用操作的场景。
  * 
  * @param T 输入参数类型
+ * 
+ * @example
+ * ```kotlin
+ * val printer: Function1<String> = Function1 { println("Hello $it") }
+ * printer.apply("World") // 输出: Hello World
+ * ```
  */
 fun interface Function1<in T> {
 
@@ -55,6 +59,12 @@ fun interface Function1<in T> {
  * 
  * @param T 输入参数类型
  * @param R 返回值类型
+ * 
+ * @example
+ * ```kotlin
+ * val converter: Function2<String, Int> = Function2 { it.length }
+ * val length = converter.apply("Hello") // 返回 5
+ * ```
  */
 fun interface Function2<in T, R> {
 
@@ -78,6 +88,14 @@ fun interface Function2<in T, R> {
  * @param C 第三个输入参数类型
  * @param B 第一个返回值类型
  * @param K 第二个返回值类型
+ * 
+ * @example
+ * ```kotlin
+ * val calculator: Function3To2<Int, Int, Int, Int, Double> = Function3To2 { a, b, c ->
+ *     Pair1(a + b, c.toDouble() / 2)
+ * }
+ * val result = calculator.apply(1, 2, 10) // 返回 Pair1(3, 5.0)
+ * ```
  */
 fun interface Function3To2<in T, in R, in C, B, K> {
 
@@ -102,6 +120,15 @@ fun interface Function3To2<in T, in R, in C, B, K> {
  * @param R 第二个输入参数类型
  * @param B 第一个返回值类型
  * @param K 第二个返回值类型
+ * 
+ * @example
+ * ```kotlin
+ * val splitter: Function2To2<String, String, String, Int> = Function2To2 { text, delimiter ->
+ *     val parts = text.split(delimiter)
+ *     Pair1(parts.firstOrNull() ?: "", parts.size)
+ * }
+ * val result = splitter.apply("a,b,c", ",") // 返回 Pair1("a", 3)
+ * ```
  */
 fun interface Function2To2<in T, in R, B, K> {
 

@@ -35,6 +35,10 @@ import kotlin.system.measureTimeMillis
  *
  * 所有可注册项目的基类，包含配置节点和唯一标识符。
  * 用于统一管理各种配置项的加载和存储。
+ * 提供基本的配置访问功能。
+ *
+ * @param root 配置根节点，包含该注册项的所有配置信息
+ * @param id 注册项的唯一标识符，默认为配置节点名称
  *
  * @author mical
  * @since 2025/6/20 19:31
@@ -51,8 +55,10 @@ abstract class RegistryItem(
  *
  * 提供统一的注册项管理功能，支持配置文件的自动加载和重载。
  * 实现了 Map 接口，可以直接通过键值对的方式访问注册项。
+ * 支持依赖检查和生命周期管理。
  *
  * @param T 注册项类型，必须继承自 RegistryItem
+ * @param registryId 注册器唯一标识符
  * @param itemFactory 用于创建注册项实例的工厂函数
  * @param registered 存储已注册项的并发哈希映射
  *
