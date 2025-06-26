@@ -37,7 +37,7 @@ subprojects {
             )
         }
         version {
-            taboolib = "6.2.3-ad29825"
+            taboolib = "6.2.3-eeb12e4"
         }
     }
 
@@ -55,8 +55,8 @@ subprojects {
     // 编译配置
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_HIGHER
-        targetCompatibility = JavaVersion.VERSION_HIGHER
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
