@@ -64,6 +64,14 @@ interface AntiGrief {
      * 检查插件是否存在
      */
     fun checkRunning(): Boolean {
+        if (getAntiGriefPluginName().contains('.')) {
+            return try {
+                Class.forName(getAntiGriefPluginName())
+                true
+            } catch (_: ClassNotFoundException) {
+                false
+            }
+        }
         return bukkitPlugin.server.pluginManager.getPlugin(getAntiGriefPluginName()) != null
     }
 }
