@@ -26,6 +26,7 @@ import org.bukkit.event.inventory.PrepareAnvilEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
+import org.bukkit.inventory.meta.ItemMeta
 import taboolib.common.LifeCycle
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
@@ -150,12 +151,19 @@ object AnvilSupport {
         result = event.result
         renameText = event.name
 
-        // 若改名框内没有文本, 且不是物品合并
+        experience += renameCost
+
+        // 若改名框内没有文本, 且不是物品合并, 就是清除物品上的自定义名称
         if ((renameText.isNullOrEmpty() || renameText.isBlank()) && right == null) {
-            return AnvilResult.Failed
+            if (result?.itemMeta?.displayName() == null) {
+                return AnvilResult.Failed
+            }
+            result.modifyMeta<ItemMeta> {
+                displayName(null)
+            }
+            return AnvilResult.Successful(result, experience.cint, 0, true)
         }
 
-        experience += renameCost
         // 改名, 用了自己写的一个扩展属性
         result?.name = name
 

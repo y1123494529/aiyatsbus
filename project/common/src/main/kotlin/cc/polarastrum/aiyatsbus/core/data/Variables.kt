@@ -27,14 +27,16 @@ import taboolib.module.configuration.util.asMap
 import taboolib.module.nms.getItemTag
 import taboolib.module.nms.setItemTag
 import taboolib.platform.util.modifyMeta
+import java.util.function.IntFunction
 
 /**
  * 附魔变量类型枚举
  *
- * 定义了三种不同类型的变量：
+ * 定义了四种不同类型的变量：
  * - leveled：与等级有关的变量，例如等级越高触发概率越大，公式需要带入等级计算，可嵌套其他变量但严禁互相嵌套
  * - modifiable：与物品强相关的数据，需要写在物品的 PDC 里，如武器击杀次数累积多少触发什么东西
  * - ordinary：常量，也可以理解为配置项，不提供任何计算
+ * - custom：开发者自定义的变量，通过函数计算得出结果
  *
  * @author mical
  * @since 2024/2/17 22:29
@@ -47,14 +49,17 @@ enum class VariableType {
     MODIFIABLE,
 
     /** 常量配置项 */
-    ORDINARY
+    ORDINARY,
+
+    /** 开发者添加的变量 */
+    CUSTOM
 }
 
 /**
  * 附魔变量管理类
  *
  * 负责管理附魔系统中的各种变量，包括变量的解析、计算和存储。
- * 支持三种类型的变量：等级相关变量、物品相关变量和常量变量。
+ * 支持四种类型的变量：等级相关变量、物品相关变量、常量变量和自定义变量。
  * 提供变量计算、修改和批量处理功能。
  *
  * @param root 配置根节点，包含所有变量的配置信息
@@ -77,6 +82,9 @@ class Variables(
 
     /** 常量，相当于附魔配置，变量名对值 */
     val ordinary: MutableMap<String, Any?> = HashMap()
+
+    /** 开发者添加的变量，变量名对函数，函数传入一个等级取得参数值 */
+    val custom: MutableMap<String, IntFunction<Any?>> = HashMap()
 
     init {
         // 解析等级相关变量
@@ -189,6 +197,18 @@ class Variables(
     fun ordinary(variable: String): Any? = ordinary[variable]
 
     /**
+     * 计算自定义变量并返回结果
+     *
+     * 调用开发者注册的自定义函数计算变量值。
+     * 函数接收等级参数并返回计算结果。
+     *
+     * @param variable 变量名
+     * @param level 当前等级
+     * @return 计算结果，如果变量不存在则返回 null
+     */
+    fun custom(variable: String, level: Int): Any? = custom[variable]?.apply(level)
+
+    /**
      * 计算变量并得到值
      *
      * 根据变量类型自动选择相应的计算方法。
@@ -205,6 +225,7 @@ class Variables(
             VariableType.LEVELED -> leveled(variable, level, withUnit)
             VariableType.MODIFIABLE -> modifiable(variable, item)
             VariableType.ORDINARY -> ordinary(variable)
+            VariableType.CUSTOM -> custom(variable, level)
         }
     }
 

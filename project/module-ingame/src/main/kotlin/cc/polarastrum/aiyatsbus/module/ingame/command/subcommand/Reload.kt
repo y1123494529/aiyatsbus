@@ -18,6 +18,7 @@ package cc.polarastrum.aiyatsbus.module.ingame.command.subcommand
 
 import cc.polarastrum.aiyatsbus.core.*
 import cc.polarastrum.aiyatsbus.core.compat.EnchantRegistrationHooks
+import cc.polarastrum.aiyatsbus.core.event.AiyatsbusReloadEvent
 import cc.polarastrum.aiyatsbus.core.registration.modern.ModernEnchantmentRegisterer
 import cc.polarastrum.aiyatsbus.core.util.Reloadables
 import cc.polarastrum.aiyatsbus.module.ingame.command.AiyatsbusCommand
@@ -41,6 +42,10 @@ val reloadSubCommand = subCommand {
         (Aiyatsbus.api().getEnchantmentRegisterer() as? ModernEnchantmentRegisterer)?.unfreezeRegistry()
         Language.reload()
         AiyatsbusSettings.conf.reload()
+        // 外置添加附魔的插件要在此时完成注册
+        // 这样会被添加到第三方附魔列表中
+        val event = AiyatsbusReloadEvent()
+        event.call()
         Reloadables.execute()
         (Aiyatsbus.api().getEnchantmentRegisterer() as? ModernEnchantmentRegisterer)?.freezeRegistry()
         Aiyatsbus.api().getDisplayManager().getSettings().conf.reload()
