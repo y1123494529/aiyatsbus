@@ -59,6 +59,5 @@ val reloadSubCommand = subCommand {
         sender.sendLang("plugin-reload", System.currentTimeMillis() - time)
         EnchantRegistrationHooks.unregisterHooks()
         EnchantRegistrationHooks.registerHooks()
-        AiyatsbusReloadEvent().call()
     }
 }
