@@ -47,7 +47,7 @@ val reloadSubCommand = subCommand {
         AnvilSupport.conf.reload()
         EnchantingTableSupport.conf.reload()
 //        ExpModifier.conf.reload()
-//        GrindstoneSupport.conf.reload()
+        GrindstoneSupport.conf.reload()
         VillagerSupport.conf.reload()
         onlinePlayers.forEach(Player::updateInventory)
         AiyatsbusCommand.init() // 重新生成 TabList
