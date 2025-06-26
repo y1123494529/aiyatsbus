@@ -59,6 +59,7 @@ import taboolib.module.configuration.conversion
 import taboolib.platform.util.isAir
 import taboolib.platform.util.killer
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.system.measureTimeMillis
 
 /**
  * Aiyatsbus
@@ -298,9 +299,10 @@ class DefaultAiyatsbusEventExecutor : AiyatsbusEventExecutor {
         @Awake(LifeCycle.ENABLE)
         fun onReload() {
             conf.onReload {
-                Aiyatsbus.api().getEventExecutor().destroyListeners()
-                Aiyatsbus.api().getEventExecutor().registerListeners()
-                console().sendLang("configuration-reload", conf.file!!.name)
+                measureTimeMillis {
+                    Aiyatsbus.api().getEventExecutor().destroyListeners()
+                    Aiyatsbus.api().getEventExecutor().registerListeners()
+                }.let { console().sendLang("configuration-reload", conf.file!!.name, it) }
             }
         }
 

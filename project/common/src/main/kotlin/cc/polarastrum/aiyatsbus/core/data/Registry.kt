@@ -82,8 +82,7 @@ abstract class Registry<T : RegistryItem>(
                 // 监听配置文件重载事件
                 if (!isLoaded) {
                     config.onReload {
-                        loadItem()
-                        console().sendLang("configuration-reload", config.file!!.name)
+                        measureTimeMillis { loadItem() }.let { console().sendLang("configuration-reload", config.file!!.name, it) }
                     }
                     isLoaded = true
                 }

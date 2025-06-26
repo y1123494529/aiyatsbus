@@ -34,6 +34,7 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.function.console
 import taboolib.common.platform.function.registerLifeCycleTask
 import taboolib.module.chat.component
+import kotlin.system.measureTimeMillis
 
 @MenuComponent("Menu")
 object MainMenuUI {
@@ -42,16 +43,15 @@ object MainMenuUI {
     private lateinit var source: Configuration
     private lateinit var config: MenuConfiguration
 
-    fun reload() {
-        source.reload()
+    fun initialize() {
         config = MenuConfiguration(source)
     }
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
         source.onReload {
-            config = MenuConfiguration(source)
-            console().sendLang("configuration-reload", source.file!!.name)
+            measureTimeMillis { config = MenuConfiguration(source) }
+                .let { console().sendLang("configuration-reload", source.file!!.name, it) }
         }
     }
 
@@ -88,7 +88,7 @@ object MainMenuUI {
     }
 
     @Awake(LifeCycle.LOAD)
-    fun initialize() {
+    fun load() {
         reloadable {
             registerLifeCycleTask(LifeCycle.ENABLE, StandardPriorities.MENU) {
                 MenuFunctions.unregister("Back")
@@ -96,14 +96,14 @@ object MainMenuUI {
                     onBuild { (_, _, _, _, icon, args) -> icon.variable("last", listOf((args["player"] as Player).last())) }
                     onClick { (_, _, _, event, _) -> event.clicker.back() }
                 } }
-                AnvilUI.reload()
-                EnchantInfoUI.reload()
-                EnchantSearchUI.reload()
-                FilterGroupUI.reload()
-                FilterRarityUI.reload()
-                FilterTargetUI.reload()
-                ItemCheckUI.reload()
-                this.reload()
+                AnvilUI.initialize()
+                EnchantInfoUI.initialize()
+                EnchantSearchUI.initialize()
+                FilterGroupUI.initialize()
+                FilterRarityUI.initialize()
+                FilterTargetUI.initialize()
+                ItemCheckUI.initialize()
+                this.initialize()
             }
         }
     }

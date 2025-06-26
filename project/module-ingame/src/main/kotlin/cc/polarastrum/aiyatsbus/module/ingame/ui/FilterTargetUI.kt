@@ -42,6 +42,7 @@ import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.function.console
 import kotlin.collections.set
+import kotlin.system.measureTimeMillis
 
 @MenuComponent("FilterTarget")
 object FilterTargetUI {
@@ -50,16 +51,15 @@ object FilterTargetUI {
     private lateinit var source: Configuration
     private lateinit var config: MenuConfiguration
 
-    fun reload() {
-        source.reload()
+    fun initialize() {
         config = MenuConfiguration(source)
     }
 
     @Awake(LifeCycle.ENABLE)
     fun init() {
         source.onReload {
-            config = MenuConfiguration(source)
-            console().sendLang("configuration-reload", source.file!!.name)
+            measureTimeMillis { config = MenuConfiguration(source) }
+                .let { console().sendLang("configuration-reload", source.file!!.name, it) }
         }
     }
 

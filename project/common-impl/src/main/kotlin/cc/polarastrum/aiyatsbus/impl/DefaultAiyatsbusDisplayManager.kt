@@ -41,6 +41,7 @@ import taboolib.module.configuration.conversion
 import taboolib.module.nms.MinecraftVersion
 import taboolib.platform.util.modifyMeta
 import taboolib.platform.util.onlinePlayers
+import kotlin.system.measureTimeMillis
 
 /**
  * Aiyatsbus
@@ -304,8 +305,8 @@ class DefaultAiyatsbusDisplayManager : AiyatsbusDisplayManager {
         @Awake(LifeCycle.ENABLE)
         fun init() {
             conf.onReload {
-                onlinePlayers.forEach(Player::updateInventory)
-                console().sendLang("configuration-reload", conf.file!!.name)
+                measureTimeMillis { onlinePlayers.forEach(Player::updateInventory) }
+                    .let { console().sendLang("configuration-reload", conf.file!!.name, it) }
             }
         }
     }

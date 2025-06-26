@@ -61,7 +61,7 @@ object VillagerSupport {
     init {
         registerLifeCycleTask(LifeCycle.ENABLE) {
             conf.onReload {
-                console().sendLang("configuration-reload", conf.file!!.name)
+                console().sendLang("configuration-reload", conf.file!!.name, 0)
             }
         }
     }
