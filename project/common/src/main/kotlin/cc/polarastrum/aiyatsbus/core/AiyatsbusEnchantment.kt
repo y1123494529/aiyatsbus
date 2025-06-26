@@ -25,6 +25,7 @@ import cc.polarastrum.aiyatsbus.core.util.roman
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
+import taboolib.module.chat.colored
 import taboolib.module.configuration.Configuration
 import java.io.File
 
@@ -131,9 +132,8 @@ interface AiyatsbusEnchantment {
      * 显示名称
      */
     fun displayName(level: Int? = null, roman: Boolean = true): String {
-        return rarity.displayName(
-            basicData.name + if (roman) (level?.roman(basicData.maxLevel == 1, true)
-                ?: "") else if (basicData.maxLevel == 1) "" else level
-        )
+        val name = basicData.name.colored() + if (roman) (level?.roman(basicData.maxLevel == 1, true)
+            ?: "") else if (basicData.maxLevel == 1) "" else level
+        return if (basicData.nameHasColor) name else rarity.displayName(name)
     }
 }

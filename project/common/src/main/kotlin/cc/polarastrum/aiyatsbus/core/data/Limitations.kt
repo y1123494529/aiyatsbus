@@ -65,11 +65,11 @@ data class Limitations(
                     if (value == "*") {
                         conflictsWithEverything = true
                     } else {
-                        conflicts += belonging.basicData.name to value
+                        conflicts += belonging.basicData.originName to value
                     }
                 }
                 CONFLICT_GROUP -> {
-                    conflictGroups += belonging.basicData.name to value
+                    conflictGroups += belonging.basicData.originName to value
                     result += type to value
                 }
                 else -> result += type to value

@@ -95,7 +95,7 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
             val ench = Aiyatsbus.api().getEnchantmentRegisterer().register(enchantment) as AiyatsbusEnchantment
             byKeyMap[enchantment.enchantmentKey] = ench
             byKeyStringMap[enchantment.basicData.id] = ench
-            byNameMap[enchantment.basicData.name] = ench
+            byNameMap[enchantment.basicData.originName] = ench
         }
         EnchantRegistrationHooks.registerHooks()
     }
@@ -106,7 +106,7 @@ class DefaultAiyatsbusEnchantmentManager : AiyatsbusEnchantmentManager {
         Aiyatsbus.api().getEnchantmentRegisterer().unregister(enchantment)
         byKeyMap -= enchantment.enchantmentKey
         byKeyStringMap -= enchantment.basicData.id
-        byNameMap -= enchantment.basicData.name
+        byNameMap -= enchantment.basicData.originName
     }
 
     override fun loadEnchantments() {

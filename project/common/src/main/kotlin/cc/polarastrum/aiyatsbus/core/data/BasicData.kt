@@ -18,6 +18,8 @@ package cc.polarastrum.aiyatsbus.core.data
 
 import cc.polarastrum.aiyatsbus.core.util.coerceInt
 import taboolib.library.configuration.ConfigurationSection
+import taboolib.module.chat.colored
+import taboolib.module.chat.uncolored
 
 /**
  * 附魔基本数据类
@@ -41,4 +43,14 @@ data class BasicData(
     val name: String = root.getString("name")!!,
     /** 附魔的最大等级，默认为 1 */
     val maxLevel: Int = (root["max-level"]?.coerceInt(1) ?: root.getInt("max_level", 1))
-)
+) {
+
+    /**
+     * uncolored() 是通过 bungee-chat 的 ChatColor 去色的
+     * 所以 TabooLib 提供的颜色格式必须先通过 colored() 转为 bungee-chat 的颜色格式
+     * 再通过 uncolored() 去色
+     */
+    val originName: String = name.colored().uncolored()
+
+    val nameHasColor: Boolean = originName != name
+}

@@ -76,7 +76,7 @@ object AiyatsbusCommand {
         registerLifeCycleTask(LifeCycle.ACTIVE, 999) {
             // 生成 TabList
             enchantNamesAndIds.clear()
-            enchantNamesAndIds.addAll(Aiyatsbus.api().getEnchantmentManager().getEnchants().values.map { listOf(it.basicData.id, it.basicData.name) }.flatten())
+            enchantNamesAndIds.addAll(Aiyatsbus.api().getEnchantmentManager().getEnchants().values.map { listOf(it.basicData.id, it.basicData.originName) }.flatten())
         }
     }
 }
