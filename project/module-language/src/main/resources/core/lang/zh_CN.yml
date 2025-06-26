@@ -60,7 +60,7 @@ ui-type-filter_group: '类型定位筛选器' # 筛选器的名称相较于 3.0 
 ui-type-filter_rarity: '品质筛选器'
 ui-type-filter_target: '物品类别筛选器'
 ui-type-item_check: '附魔查询'
-ui-type-main-menu: '附魔主菜单'
+ui-type-main_menu: '附魔主菜单'
 ui-type-favorite: '附魔收藏夹'
 
 ui-check-mode-find: '&7搜索可用附魔'

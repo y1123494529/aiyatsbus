@@ -87,6 +87,13 @@ object MainMenuUI {
         }
     }
 
+    @MenuComponent
+    private val favorites = MenuFunctionBuilder {
+        onClick { (_, _, _, event, _) ->
+            FavoritesUI.open(event.clicker)
+        }
+    }
+
     @Awake(LifeCycle.LOAD)
     fun load() {
         reloadable {
@@ -99,6 +106,7 @@ object MainMenuUI {
                 AnvilUI.initialize()
                 EnchantInfoUI.initialize()
                 EnchantSearchUI.initialize()
+                FavoritesUI.initialize()
                 FilterGroupUI.initialize()
                 FilterRarityUI.initialize()
                 FilterTargetUI.initialize()

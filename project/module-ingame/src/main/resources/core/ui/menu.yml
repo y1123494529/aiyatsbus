@@ -6,7 +6,7 @@
 title: "Aiyatsbus 更多附魔"
 shape:
   - 'FFFFFFFFF'
-  - '  A B C  '
+  - ' A B C D '
   - 'FFFFFFFFF'
 
 template:
@@ -14,7 +14,7 @@ template:
     material: BLACK_STAINED_GLASS_PANE
     name: "&7"
   'A':
-    material: BOOK
+    material: PLAYER_HEAD
     name: "&b附魔大全"
     lore:
       - "&8| &7在这里查询所有附魔"
@@ -29,7 +29,7 @@ template:
       - ==: Functional
         keyword: Menu:enchant_search
   'B':
-    material: COMPASS
+    material: PLAYER_HEAD
     name: "&b物品查询"
     lore:
       - "&8| &7在这里查询物品上的附魔"
@@ -40,7 +40,7 @@ template:
       - ==: Functional
         keyword: Menu:item_check
   'C':
-    material: ANVIL
+    material: PLAYER_HEAD
     name: "&c铁砧模拟器"
     lore:
       - "&8| &7在这里预览铁砧拼合的结果"
@@ -55,12 +55,24 @@ template:
       - ==: Functional
         keyword: Menu:anvil
 
+  'D':
+    material: PLAYER_HEAD
+    name: "&b收藏夹"
+    lore:
+      - "&8| &7在这里查询收藏夹内的附魔"
+      - "&8| &7可快速查询你收藏的附魔的信息"
+    feature:
+      - ==: Head
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTYzMzBhNGEyMmZmNTU4NzFmYzhjNjE4ZTQyMWEzNzczM2FjMWRjYWI5YzhlMWE0YmI3M2FlNjQ1YTRhNGUifX19"
+      - ==: Functional
+        keyword: Menu:favorites
+
 # 如果您需要返回上一页的按钮, 就取消下面的注释
-# 并将按钮 D 添加进配置文件最上方的 shape 抽象字符布局界面里
+# 并将按钮 E 添加进配置文件最上方的 shape 抽象字符布局界面里
 # 这个返回上一页按钮点击后会调用命令
 # 这个命令是您在 config.yml 里配置的命令 (main-menu-back)
 
-#  'D':
+#  'E':
 #    material: PLAYER_HEAD
 #    name: "&e返回"
 #    lore:
