@@ -21,6 +21,7 @@ import cc.polarastrum.aiyatsbus.core.toRevertMode
 import cc.polarastrum.aiyatsbus.core.util.isNull
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.module.nms.MinecraftVersion.versionId
 import taboolib.module.nms.NMSItemTag
 import taboolib.module.nms.PacketReceiveEvent
 import taboolib.module.nms.PacketSendEvent
@@ -52,6 +53,7 @@ object PacketSetCursorItem {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun e(e: PacketReceiveEvent) {
+        if (versionId >= 12106) return
         val name = e.packet.name
         if (name == "PacketPlayInWindowClick" || name == "ServerboundContainerClickPacket") {
             try {
