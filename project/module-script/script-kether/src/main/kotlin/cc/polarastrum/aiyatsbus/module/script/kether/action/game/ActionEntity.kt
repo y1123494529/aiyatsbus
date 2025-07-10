@@ -34,6 +34,7 @@ import taboolib.module.kether.KetherParser
 import taboolib.module.kether.combinationParser
 import taboolib.module.kether.player
 import taboolib.module.nms.getI18nName
+import kotlin.jvm.optionals.getOrElse
 
 /**
  * Aiyatsbus
@@ -59,11 +60,12 @@ object ActionEntity {
 
     @KetherParser(["realDamage", "real-damage"], shared = true)
     fun realDamageParser() = combinationParser {
-        it.group(type<LivingEntity>(), command("with", then = double()), command("by", then = type<Entity>()).option()).apply(it) { entity, damage, who ->
-            now {
-                entity.realDamage(damage, who)
+        it.group(type<LivingEntity>(), command("with", then = double()), command("by", then = type<Entity>()).option())
+            .apply(it) { entity, damage, who ->
+                now {
+                    entity.realDamage(damage, who)
+                }
             }
-        }
     }
 
     @KetherParser(["entity-name"], shared = true)
@@ -96,7 +98,16 @@ object ActionEntity {
             command("icon", then = bool()).option()
         ).apply(it) { type, entity, duration, amplifier, ambient, particles, icon ->
             now {
-                entity.addPotionEffect(PotionEffect( XPotion.valueOf(type).potionEffectType ?: return@now, duration, amplifier, ambient ?: true, particles ?: true, icon ?: true))
+                entity.addPotionEffect(
+                    PotionEffect(
+                        XPotion.of(type).orElseThrow().potionEffectType ?: return@now,
+                        duration,
+                        amplifier,
+                        ambient ?: true,
+                        particles ?: true,
+                        icon ?: true
+                    )
+                )
             }
         }
     }
@@ -104,59 +115,84 @@ object ActionEntity {
     @KetherParser(["potion-duration"], shared = true)
     fun actionPotionDuration() = combinationParser {
         it.group(text(), command("on", then = type<LivingEntity>())).apply(it) { type, entity ->
-            now { entity.activePotionEffects.filter {
-                it.type == (XPotion.valueOf(type).potionEffectType ?: return@filter false)
-            }.firstOrNull()?.duration ?: 0 }
+            now {
+                entity.activePotionEffects.filter {
+                    it.type == (XPotion.of(type).orElseThrow().potionEffectType ?: return@filter false)
+                }.firstOrNull()?.duration ?: 0
+            }
         }
     }
 
     @KetherParser(["potion-amplifier"], shared = true)
     fun actionPotionAmplifier() = combinationParser {
         it.group(text(), command("on", then = type<LivingEntity>())).apply(it) { type, entity ->
-            now { entity.activePotionEffects.filter {
-                it.type == (XPotion.valueOf(type).potionEffectType ?: return@filter false)
-            }.firstOrNull()?.amplifier ?: 0 }
+            now {
+                entity.activePotionEffects.filter {
+                    it.type == (XPotion.of(type).orElseThrow().potionEffectType ?: return@filter false)
+                }.firstOrNull()?.amplifier ?: 0
+            }
+        }
+    }
+
+    @KetherParser(["potion-is-infinite"], shared = true)
+    fun actionPotionInfinite() = combinationParser {
+        it.group(text(), command("on", then = type<LivingEntity>())).apply(it) { type, entity ->
+            now {
+                entity.activePotionEffects.filter {
+                    it.type == (XPotion.of(type).orElseThrow().potionEffectType ?: return@filter false)
+                }.firstOrNull()?.isInfinite ?: false
+            }
         }
     }
 
     @KetherParser(["potion-is-ambient"], shared = true)
     fun actionPotionAmbient() = combinationParser {
         it.group(text(), command("on", then = type<LivingEntity>())).apply(it) { type, entity ->
-            now { entity.activePotionEffects.filter {
-                it.type == (XPotion.valueOf(type).potionEffectType ?: return@filter false)
-            }.firstOrNull()?.isAmbient }
+            now {
+                entity.activePotionEffects.filter {
+                    it.type == (XPotion.of(type).orElseThrow().potionEffectType ?: return@filter false)
+                }.firstOrNull()?.isAmbient ?: false
+            }
         }
     }
 
     @KetherParser(["potion-has-particles"], shared = true)
     fun actionPotionParticles() = combinationParser {
         it.group(text(), command("on", then = type<LivingEntity>())).apply(it) { type, entity ->
-            now { entity.activePotionEffects.filter {
-                it.type == (XPotion.valueOf(type).potionEffectType ?: return@filter false)
-            }.firstOrNull()?.hasParticles() }
+            now {
+                entity.activePotionEffects.filter {
+                    it.type == (XPotion.of(type).orElseThrow().potionEffectType ?: return@filter false)
+                }.firstOrNull()?.hasParticles() ?: false
+            }
         }
     }
 
     @KetherParser(["potion-has-icon"], shared = true)
     fun actionPotionIcon() = combinationParser {
         it.group(text(), command("on", then = type<LivingEntity>())).apply(it) { type, entity ->
-            now { entity.activePotionEffects.filter {
-                it.type == (XPotion.valueOf(type).potionEffectType ?: return@filter false)
-            }.firstOrNull()?.hasIcon() }
+            now {
+                entity.activePotionEffects.filter {
+                    it.type == (XPotion.of(type).orElseThrow().potionEffectType ?: return@filter false)
+                }.firstOrNull()?.hasIcon() ?: false
+            }
         }
     }
 
     @KetherParser(["has-potion-effect"], shared = true)
     fun actionHasPotionEffect() = combinationParser {
         it.group(text(), command("on", then = type<LivingEntity>())).apply(it) { type, entity ->
-            now { entity.hasPotionEffect(XPotion.valueOf(type).potionEffectType ?: return@now) }
+            now {
+                entity.hasPotionEffect(XPotion.of(type).orElseThrow().potionEffectType ?: return@now)
+            }
         }
     }
 
     @KetherParser(["remove-potion-effect"], shared = true)
     fun actionRemovePotionEffect() = combinationParser {
         it.group(text(), command("from", then = type<LivingEntity>())).apply(it) { type, entity ->
-            now { entity.removePotionEffect(XPotion.valueOf(type).potionEffectType ?: return@now) }
+            now {
+                entity.removePotionEffect(XPotion.of(type).orElseThrow().potionEffectType ?: return@now)
+            }
         }
     }
 
