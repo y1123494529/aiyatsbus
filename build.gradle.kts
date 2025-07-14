@@ -26,6 +26,8 @@ subprojects {
                 Bukkit,
                 BukkitHook,
                 BukkitNMSItemTag,
+                "bukkit-nms-tag-12105",
+                "bukkit-nms-tag-12106",
                 BukkitUI,
                 BukkitUtil,
                 I18n,
