@@ -66,10 +66,13 @@ object DisplayReplacerNBT : DisplayReplacer {
             val display = item.toDisplayMode(player)
 
             val target = display.displayName().hoverEvent(display.asHoverEvent())
-            json = json.replace(
-                stack.get("tag").asString.flat(),
-                extractHoverEvents(gson.serialize(target)).first().get("tag").asString.flat()
-            )
+            val targetStack = extractHoverEvents(gson.serialize(target)).first().get("tag")
+            if (targetStack != null) {
+                json = json.replace(
+                    tag.flat(),
+                    targetStack.asString.flat()
+                )
+            }
         }
 
         return when (component) {
