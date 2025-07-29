@@ -27,69 +27,55 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # 3. 安装Gradle
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.6
-
-      # 4. 验证安装
-      - name: Check versions
+      # 3. 安装Gradle（使用Gradle Wrapper避免下载问题）
+      - name: Setup Gradle Wrapper
         run: |
-          java -version
-          gradle -v
-          git --version
+          chmod +x gradlew
+          ./gradlew --version
 
-      # 5. 缓存Gradle依赖
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      # 6. 修复Kotlin JVM目标版本问题 (关键修复)
+      # 4. 修复Kotlin JVM目标版本问题
       - name: Fix Kotlin JVM target version
         run: |
           # 设置Kotlin JVM目标版本为17
           find . -name '*.gradle.kts' -exec sed -i 's/jvmTarget = "1.8"/jvmTarget = "17"/g' {} +
           
-          # 或者使用更精确的替换，如果上面的命令不起作用
-          # find . -type f -name '*.gradle.kts' -exec sed -i 's/\.jvmTarget\s*=\s*["'']1.8["'']/.jvmTarget = "17"/g' {} +
-          
-          # 检查替换结果
-          git diff || true
+          # 添加显式的工具链配置
+          echo 'kotlin { jvmToolchain(17) }' >> build.gradle.kts
+          echo 'tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "17" }' >> build.gradle.kts
 
-      # 7. 执行构建
+      # 5. 执行构建（使用Gradle Wrapper）
       - name: Build with Gradle
         run: |
-          # 使用Gradle Wrapper确保一致性
-          chmod +x gradlew
-          ./gradlew build --no-daemon --warning-mode all
-          
-          # 或者显式设置Kotlin JVM目标版本
-          # ./gradlew build -Pkotlin.jvm.target=17 --no-daemon
+          ./gradlew clean build --no-daemon \
+            -Pkotlin.jvm.target=17 \
+            -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=1g"
 
-      # 8. 存储构建产物
+      # 6. 查找构建产物
+      - name: Find build artifacts
+        run: |
+          echo "JAR files found:"
+          find . -name '*.jar' -print
+          echo "Build outputs:"
+          find . -type d -name 'build' -print
+
+      # 7. 存储构建产物（使用更灵活的路径）
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: aiyatsbus-plugin
           path: |
-            build/libs/*.jar
-            build/outputs/**/*
+            **/build/libs/*.jar
+            **/build/outputs/**/*
+          if-no-files-found: warn
           retention-days: 7
 
-      # 9. 创建发布
+      # 8. 创建发布
       - name: Create Release
         if: github.event_name == 'release' && github.event.action == 'published'
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            build/libs/*.jar
+            **/build/libs/*.jar
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
