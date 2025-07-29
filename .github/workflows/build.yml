@@ -33,36 +33,28 @@ jobs:
           chmod +x gradlew
           ./gradlew --version
 
-      # 4. 修复Kotlin JVM目标版本问题（更安全的方法）
-      - name: Fix Kotlin JVM target version
-        run: |
-          # 更安全的查找和替换方法
-          find . -name '*.gradle.kts' -exec sed -i 's/jvmTarget\s*=\s*["'']1.8["'']/jvmTarget = "17"/g' {} +
-          
-          # 或者直接修改编译任务设置
-          echo 'tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {' >> build.gradle.kts
-          echo '    kotlinOptions.jvmTarget = "17"' >> build.gradle.kts
-          echo '}' >> build.gradle.kts
-          
-          # 显示修改内容以便调试
-          tail -n 5 build.gradle.kts || true
-
-      # 5. 执行构建
+      # 4. 执行构建（保持简单）
       - name: Build with Gradle
         run: |
-          # 使用Gradle Wrapper确保一致性
-          ./gradlew clean build --no-daemon \
-            -Dkotlin.compiler.jvmTarget=17 \
-            -Dorg.gradle.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=1g"
+          ./gradlew clean build --no-daemon
 
-      # 6. 存储构建产物
+      # 5. 查找并显示所有JAR文件（关键调试步骤）
+      - name: Find all JAR files
+        run: |
+          echo "===== 所有JAR文件列表 ====="
+          find . -name '*.jar' -print
+          echo "=========================="
+
+      # 6. 存储构建产物（使用更精确的路径）
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: aiyatsbus-plugin
           path: |
-            **/build/libs/*.jar
-          if-no-files-found: warn
+            plugin/build/libs/*.jar
+            project/build/libs/*.jar
+            project/common/build/libs/*.jar
+          if-no-files-found: error
           retention-days: 7
 
       # 7. 创建发布
@@ -71,7 +63,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            **/build/libs/*.jar
+            plugin/build/libs/*.jar
+            project/build/libs/*.jar
+            project/common/build/libs/*.jar
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
