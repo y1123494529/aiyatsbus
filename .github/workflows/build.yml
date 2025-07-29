@@ -1,0 +1,81 @@
+name: Build aiyatsbus Plugin
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. 检出代码（使用预装的Git）
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive  # 如果需要子模块
+          fetch-depth: 0         # 获取完整历史记录（某些构建需要）
+
+      # 2. 设置Java环境（根据文档要求）
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'     # 根据文档要求调整版本
+
+      # 3. 安装Gradle
+      - name: Install Gradle
+        run: |
+          # 下载最新版Gradle
+          wget https://services.gradle.org/distributions/gradle-8.6-bin.zip -P /tmp
+          sudo unzip -d /opt/gradle /tmp/gradle-*.zip
+          # 添加到PATH
+          echo "GRADLE_HOME=/opt/gradle/gradle-8.6" >> $GITHUB_ENV
+          echo "$GRADLE_HOME/bin" >> $GITHUB_PATH
+          
+      # 4. 验证安装
+      - name: Check versions
+        run: |
+          java -version
+          gradle -v
+          git --version
+
+      # 5. 缓存Gradle依赖（加速构建）
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 6. 执行构建（根据文档调整命令）
+      - name: Build with Gradle
+        run: gradle build --no-daemon  # 或 ./gradlew build
+
+      # 7. 存储构建产物
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: aiyatsbus-plugin
+          path: |
+            build/libs/*.jar
+            build/outputs/**/*
+          retention-days: 7
+
+      # 8. 可选：创建发布
+      - name: Create Release
+        if: github.event_name == 'release' && github.event.action == 'published'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build/libs/*.jar
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
